@@ -25,6 +25,8 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
+  --color-success: var(--success); /* Added for deposits/positive states */
+  --color-warning: var(--warning); /* Added for pending states */
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -67,22 +69,24 @@
   --secondary-foreground: oklch(0.22 0 0);
 
   --muted: oklch(0.95 0 0);
-  --muted-foreground: oklch(0.55 0 0);
+  --muted-foreground: oklch(0.45 0 0); /* Darker for contrast */
 
   --accent: oklch(0.92 0.03 200);
   --accent-foreground: oklch(0.22 0 0);
 
   --destructive: oklch(0.6 0.25 25); /* red */
+  --success: oklch(0.6 0.15 150); /* green for deposits */
+  --warning: oklch(0.7 0.2 100); /* yellow for pending */
   --border: oklch(0.9 0 0);
   --input: oklch(0.9 0 0);
   --ring: oklch(0.55 0.1 250);
 
   /* Chart colors */
   --chart-1: oklch(0.55 0.15 250); /* blue */
-  --chart-2: oklch(0.6 0.15 150);  /* teal/green */
-  --chart-3: oklch(0.7 0.2 100);   /* lime */
-  --chart-4: oklch(0.65 0.2 280);  /* purple */
-  --chart-5: oklch(0.7 0.2 30);    /* orange */
+  --chart-2: oklch(0.6 0.15 150); /* teal/green */
+  --chart-3: oklch(0.7 0.2 100); /* lime */
+  --chart-4: oklch(0.65 0.2 280); /* purple */
+  --chart-5: oklch(0.6 0.25 25); /* red for negative trends */
 
   /* Sidebar */
   --sidebar: oklch(0.985 0 0);
@@ -113,22 +117,24 @@
   --secondary-foreground: oklch(0.98 0 0);
 
   --muted: oklch(0.3 0 0);
-  --muted-foreground: oklch(0.72 0 0);
+  --muted-foreground: oklch(0.75 0 0); /* Lighter for contrast */
 
   --accent: oklch(0.35 0.05 250);
   --accent-foreground: oklch(0.98 0 0);
 
   --destructive: oklch(0.65 0.25 25); /* strong red */
+  --success: oklch(0.65 0.18 150); /* green */
+  --warning: oklch(0.7 0.2 100); /* yellow */
   --border: oklch(0.3 0 0 / 60%);
   --input: oklch(0.3 0 0 / 70%);
   --ring: oklch(0.72 0.15 250);
 
-  /* Chart colors (more vibrant in dark) */
+  /* Chart colors */
   --chart-1: oklch(0.72 0.15 250);
   --chart-2: oklch(0.65 0.18 160);
   --chart-3: oklch(0.7 0.2 100);
   --chart-4: oklch(0.7 0.25 300);
-  --chart-5: oklch(0.72 0.25 40);
+  --chart-5: oklch(0.65 0.25 25); /* red for negative trends */
 
   /* Sidebar */
   --sidebar: oklch(0.22 0 0);
@@ -143,9 +149,37 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 focus-visible:outline-ring focus-visible:outline-2;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer utilities {
+  /* Wallet-specific utilities */
+  .wallet-card {
+    @apply bg-gradient-to-br from-card to-muted/30 shadow-sm rounded-[var(--radius-lg)] transition-all duration-200 hover:shadow-md;
+  }
+  .balance-positive {
+    @apply text-[var(--success)] font-semibold;
+  }
+  .balance-negative {
+    @apply text-[var(--destructive)] font-semibold;
+  }
+  .tx-pending {
+    @apply text-[var(--warning)];
+  }
+  .tx-hover {
+    @apply hover:bg-accent/20 transition-colors duration-150;
+  }
+  .address-mono {
+    @apply font-mono tracking-tight text-sm;
+  }
+  .copy-button {
+    @apply text-[var(--muted-foreground)] hover:text-[var(--primary)] transition-colors duration-150;
+  }
+  .tx-loading {
+    @apply animate-pulse;
   }
 }
