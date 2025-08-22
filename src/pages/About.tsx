@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Smartphone, Users } from "lucide-react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 const teamMembers = [
   {
@@ -23,6 +24,9 @@ const teamMembers = [
 ];
 
 const About: React.FC = () => {
+  const handleToastClick= ()=>{
+    toast.success("toast activated sussuccfully")
+  }
   return (
     <section className="bg-background py-12 md:py-20">
       <div className="container mx-auto px-4 md:px-6">
@@ -40,7 +44,9 @@ const About: React.FC = () => {
             size="lg"
           >
             <Link to="/register">
-              Join Us
+             <Button onClick={handleToastClick}>
+                 Join Us
+             </Button>
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
