@@ -1,6 +1,4 @@
 import Logo from "@/components/logo"
-import NotificationMenu from "@/components/notification-menu"
-import UserMenu from "@/components/user-menu"
 import { Button } from "@/components/ui/button"
 import {
   NavigationMenu,
@@ -109,11 +107,12 @@ export default function Navbar() {
            
            
             <ModeToggle></ModeToggle>
-            {/* Notification */}
-            <NotificationMenu />
+           
           </div>
           {/* User menu */}
-          <UserMenu />
+          <Link to={"/login"}>
+          <Button>Login</Button>
+          </Link>
         </div>
       </div>
     </header>
