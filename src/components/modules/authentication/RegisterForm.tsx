@@ -7,11 +7,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
 
 const registerSchema = z
   .object({
     name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email address"),
+    email: z.email("Invalid email address"),
     password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(6, "Confirm password is required"),
     phone: z.string().regex(/^(?:\+880|880|0)1[3-9][0-9]{8}$/, "Invalid Bangladeshi phone number"),
@@ -26,6 +27,7 @@ const registerSchema = z
 
 const RegisterForm: React.FC = () => {
   const [register] = useRegisterMutation();
+  const navigate= useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -53,6 +55,8 @@ const RegisterForm: React.FC = () => {
       const res = await register(userInfo).unwrap();
       if(res.success){
         toast.success("User created successfully")
+        navigate("/")
+
       }
     } catch (error) {
       console.log(error);
