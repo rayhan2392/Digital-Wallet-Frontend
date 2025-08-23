@@ -16,7 +16,7 @@ import { getSidebarItems } from "@/utils/getSidebarItems"
 // This is sample data.
 const data = {
 
-  navMain: getSidebarItems("admin")
+  navMain: getSidebarItems("agent")
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

@@ -39,9 +39,10 @@ const LoginForm: React.FC = () => {
     };
 
     try {
+      const toastId = toast.loading("Loging in progress...")
       const res = await login(userInfo).unwrap();
       if (res.success) {
-        toast.success("User logged in successfully");
+        toast.success("User logged in successfully",{id:toastId});
         navigate("/")
       }
     } catch (error) {
