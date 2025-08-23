@@ -24,6 +24,7 @@ const navigationLinks = [
 ]
 
 export default function Navbar() {
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -89,8 +90,8 @@ export default function Navbar() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
-                     asChild
-                     
+                      asChild
+
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
                       <Link to={link.href} >{link.label}</Link>
@@ -104,14 +105,14 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-           
-           
+
+
             <ModeToggle></ModeToggle>
-           
+
           </div>
           {/* User menu */}
           <Link to={"/login"}>
-          <Button>Login</Button>
+            <Button>Login</Button>
           </Link>
         </div>
       </div>
