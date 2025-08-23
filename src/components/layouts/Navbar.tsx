@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/popover"
 import { ModeToggle } from "./mode-toggle"
 import { Link } from "react-router"
-import { useLogOutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
-import { User } from "lucide-react"
+import { authApi, useLogOutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import { useAppDispatch } from "@/redux/hook"
 
 
