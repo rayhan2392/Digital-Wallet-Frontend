@@ -27,6 +27,20 @@ export const adminApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ['Users'],
         }),
+        blockUser: builder.mutation<IApiResponse<IUser>, { id: string }>({
+            query: ({ id }) => ({
+                url: `/user/block/${id}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Users'],
+        }),
+        unBlockUser: builder.mutation<IApiResponse<IUser>, { id: string }>({
+            query: ({ id }) => ({
+                url: `/user/unblock/${id}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Users'],
+        }),
     })
 })
 
@@ -34,5 +48,8 @@ export const adminApi = baseApi.injectEndpoints({
 export const {
     useGetAllUsersQuery,
     useApproveAgentMutation,
-    useSuspendAgentMutation
+    useSuspendAgentMutation,
+    useBlockUserMutation,
+    useUnBlockUserMutation
+
 } = adminApi
