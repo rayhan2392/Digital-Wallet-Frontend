@@ -4,13 +4,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { AdminSidebarItems } from "@/routes/AdminSidebarItems"
-import { generateRoutes } from "@/utils/generateRoutes"
+
 import { Outlet } from "react-router"
 
 export default function DashBoardLayout() {
-         const res =  generateRoutes(AdminSidebarItems)
-         console.log(res);
+         
+        
   return (
     <SidebarProvider>
       <AppSidebar />

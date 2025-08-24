@@ -15,14 +15,20 @@ import { ModeToggle } from "./mode-toggle"
 import { Link } from "react-router"
 import { authApi, useLogOutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import { useAppDispatch } from "@/redux/hook"
+import { role } from "@/constants/Role"
+import React from "react"
 
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/features", label: "Features" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", role: "public" },
+  { href: "/features", label: "Features", role: "public" },
+  { href: "/pricing", label: "Pricing", role: "public" },
+  { href: "/about", label: "About", role: "public" },
+  { href: "/admin", label: "Dashboard", role: role.admin },
+  { href: "/agent", label: "Dashboard", role: role.agent },
+  { href: "/user", label: "Dashboard", role: role.user },
+  
 ]
 
 export default function Navbar() {
@@ -35,7 +41,7 @@ export default function Navbar() {
     dispatch(authApi.util.resetApiState());
   }
 
-  console.log(data?.role);
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -98,16 +104,29 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavigationMenuLink
-                      asChild
-
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                    >
-                      <Link to={link.href} >{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
+                 {navigationLinks.map((link, index) => (
+                  <React.Fragment key={index}>
+                    {link.role === "public" && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                    {link.role === data?.role && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </React.Fragment>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>
@@ -124,9 +143,9 @@ export default function Navbar() {
           {/* User menu */}
           {
             data?.email &&
-           <Button onClick={handleLogOut}>
-            Logout
-           </Button>
+            <Button onClick={handleLogOut}>
+              Logout
+            </Button>
           }
 
           {

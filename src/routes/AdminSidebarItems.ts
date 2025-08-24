@@ -1,4 +1,4 @@
-import ApproveAgent from "@/pages/admin/ApproveAgent";
+import ManageAgent from "@/pages/admin/ManageAgent";
 import type { ISidebarItem } from "@/types";
 
 export const AdminSidebarItems: ISidebarItem[] = [
@@ -6,9 +6,9 @@ export const AdminSidebarItems: ISidebarItem[] = [
         title: "dashboard",
         items: [
             {
-                title: "Approve Agent",
+                title: "Manage Agent's",
                 url: "/admin/approve-agent",
-                component: ApproveAgent
+                component: ManageAgent
             },
             
 
