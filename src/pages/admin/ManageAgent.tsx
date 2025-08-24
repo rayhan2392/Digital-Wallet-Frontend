@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Shield } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { AgentTableSkeleton } from "@/components/common/TableSkeleton";
@@ -45,21 +46,29 @@ export default function ManageAgent() {
 
   if (isLoading) {
     return (
-      <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-        <div className="container mx-auto px-4 md:px-6">
-          <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+      <div className="fintech-hero-bg min-h-screen">
+        <div className="fintech-container space-y-8 py-8">
+          <div className="text-center space-y-4 fintech-fade-in">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 backdrop-blur-sm mx-auto w-fit">
+              <Shield className="h-12 w-12 text-green-600" />
+            </div>
+            <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+              Agent Management
+            </h1>
+          </div>
+          <Card variant="fintech">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-foreground">Manage Agents</CardTitle>
+              <CardTitle className="text-2xl font-semibold">Loading Agents...</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table className="w-full bg-[var(--background)]/80 rounded-lg overflow-hidden">
+              <Table className="w-full">
                 <TableHeader>
-                  <TableRow className="bg-[var(--primary)]/10">
-                    <TableHead className="text-foreground font-semibold">Name</TableHead>
-                    <TableHead className="text-foreground font-semibold">Email</TableHead>
-                    <TableHead className="text-foreground font-semibold">Phone</TableHead>
-                    <TableHead className="text-foreground font-semibold">Status</TableHead>
-                    <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                  <TableRow className="bg-primary/5">
+                    <TableHead className="font-semibold">Name</TableHead>
+                    <TableHead className="font-semibold">Email</TableHead>
+                    <TableHead className="font-semibold">Phone</TableHead>
+                    <TableHead className="font-semibold">Status</TableHead>
+                    <TableHead className="font-semibold">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -69,7 +78,7 @@ export default function ManageAgent() {
             </CardContent>
           </Card>
         </div>
-      </section>
+      </div>
     );
   }
 
@@ -97,14 +106,30 @@ export default function ManageAgent() {
   }
 
   return (
-    <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-      <div className="container mx-auto px-4 md:px-6">
-        <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+    <div className="fintech-hero-bg min-h-screen">
+      <div className="fintech-container space-y-8 py-8">
+        {/* Page Header */}
+        <div className="text-center space-y-4 fintech-fade-in">
+          <div className="flex items-center justify-center space-x-4">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 backdrop-blur-sm">
+              <Shield className="h-12 w-12 text-green-600" />
+            </div>
+          </div>
+          <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+            Agent Management
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Monitor, approve, and manage SwiftPay agents with comprehensive oversight tools.
+          </p>
+          <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-green-100 dark:bg-green-950/20 text-green-700 dark:text-green-400">
+            <span className="font-semibold">{agents.length}</span>
+            <span>agent{agents.length !== 1 ? 's' : ''} registered</span>
+          </div>
+        </div>
+
+        <Card variant="fintech" className="fintech-scale-in">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-foreground">Manage Agents</CardTitle>
-            <p className="text-muted-foreground mt-2">
-              {agents.length} agent{agents.length !== 1 ? 's' : ''} registered
-            </p>
+            <CardTitle className="text-2xl font-semibold">Agent Directory</CardTitle>
           </CardHeader>
           <CardContent>
             {agents.length === 0 ? (
@@ -140,9 +165,8 @@ export default function ManageAgent() {
                       <TableCell>
                         {agent.isApproved ? (
                           <Button
-                            variant="outline"
+                            variant="destructive"
                             size="sm"
-                            className="border-[var(--destructive)] text-[var(--destructive)] hover:bg-[var(--destructive)]/10"
                             onClick={() => setOpenDialog({ id: agent._id, action: "suspend", agentName: agent.name })}
                             disabled={isApproving || isSuspending}
                           >
@@ -150,13 +174,12 @@ export default function ManageAgent() {
                           </Button>
                         ) : (
                           <Button
-                            variant="outline"
+                            variant="fintech-success"
                             size="sm"
-                            className="border-[var(--success)] text-[var(--success)] hover:bg-[var(--success)]/10"
                             onClick={() => setOpenDialog({ id: agent._id, action: "approve", agentName: agent.name })}
                             disabled={isApproving || isSuspending}
                           >
-                            {isApproving ? "Approving..." : "Approve"}
+                            {isApproving ? "Approving..." : "✓ Approve"}
                           </Button>
                         )}
                       </TableCell>
@@ -204,6 +227,6 @@ export default function ManageAgent() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </section>
+    </div>
   );
 }

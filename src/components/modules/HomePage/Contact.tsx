@@ -23,16 +23,28 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="bg-background py-12 md:py-20">
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700">
-          <Card className="wallet-card">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-foreground text-center">
-                Contact Us
+    <section className="fintech-section bg-gradient-to-br from-primary/5 to-green-500/5">
+      <div className="fintech-container">
+        <div className="text-center mb-16 fintech-fade-in">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Get in <span className="fintech-gradient-text">Touch</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Have questions about SwiftPay? We're here to help you 24/7
+          </p>
+        </div>
+
+        <div className="max-w-2xl mx-auto fintech-scale-in">
+          <Card variant="fintech">
+            <CardHeader className="text-center pb-6">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto mb-6 flex items-center justify-center">
+                <Mail className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl font-bold">
+                Contact SwiftPay
               </CardTitle>
-              <p className="text-lg text-muted-foreground text-center">
-                Have questions? Reach out, and we’ll get back to you soon.
+              <p className="text-muted-foreground">
+                Send us a message and we'll respond within 24 hours
               </p>
             </CardHeader>
             <CardContent>

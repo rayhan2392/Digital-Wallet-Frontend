@@ -39,6 +39,7 @@ export interface IUser {
   role: TRole;
   isApproved: boolean;
   isBlocked?: boolean;
+  status?: "approved" | "pending" | "suspended";
   createdAt?: string;
   updatedAt?: string;
 }

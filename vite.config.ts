@@ -11,4 +11,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Enable source maps for debugging
+    sourcemap: false,
+    // Optimize for production
+    minify: 'esbuild',
+  },
 })

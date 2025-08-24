@@ -8,13 +8,7 @@ interface TransactionChartProps {
     loading?: boolean;
 }
 
-interface ChartData {
-    type: string;
-    count: number;
-    percentage: number;
-    color: string;
-    totalAmount: number;
-}
+
 
 export function TransactionChart({ transactions, loading = false }: TransactionChartProps) {
     const chartData = useMemo(() => {
@@ -54,9 +48,9 @@ export function TransactionChart({ transactions, loading = false }: TransactionC
 
     if (loading) {
         return (
-            <Card className="col-span-1">
+            <Card variant="fintech" className="col-span-1">
                 <CardHeader>
-                    <CardTitle>Transaction Distribution</CardTitle>
+                    <CardTitle className="fintech-gradient-text">Transaction Distribution</CardTitle>
                 </CardHeader>
                 <CardContent className="flex items-center justify-center py-8">
                     <LoadingSpinner />
@@ -67,9 +61,9 @@ export function TransactionChart({ transactions, loading = false }: TransactionC
 
     if (!chartData.length) {
         return (
-            <Card className="col-span-1">
+            <Card variant="fintech" className="col-span-1">
                 <CardHeader>
-                    <CardTitle>Transaction Distribution</CardTitle>
+                    <CardTitle className="fintech-gradient-text">Transaction Distribution</CardTitle>
                 </CardHeader>
                 <CardContent className="flex items-center justify-center py-8">
                     <p className="text-muted-foreground">No transaction data available</p>
@@ -84,9 +78,16 @@ export function TransactionChart({ transactions, loading = false }: TransactionC
     let currentAngle = -90; // Start from top
 
     return (
-        <Card className="col-span-1">
+        <Card variant="fintech" className="col-span-1 relative overflow-hidden">
             <CardHeader>
-                <CardTitle>Transaction Distribution</CardTitle>
+                <CardTitle className="flex items-center space-x-2">
+                    <div className="p-2 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20">
+                        <svg className="h-5 w-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M11 2v20c-5.07-.5-9-4.79-9-10s3.93-9.5 9-10zm2.03 0v8.99H22c-.47-4.74-4.24-8.52-8.97-8.99zm0 11.01V22c4.74-.47 8.5-4.25 8.97-8.99h-8.97z" />
+                        </svg>
+                    </div>
+                    <span className="fintech-gradient-text">Transaction Distribution</span>
+                </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-between">

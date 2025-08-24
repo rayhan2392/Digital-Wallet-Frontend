@@ -2,11 +2,16 @@ import { useGetAllTransactionsQuery } from "@/redux/features/transaction/transac
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { TransactionTableSkeleton } from "@/components/common/TableSkeleton";
 import { LoadingState } from "@/components/common/LoadingStates";
 import type { ITransaction } from "@/types";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import {
+  ArrowUpRight, ArrowDownLeft, Search, Filter, Eye, TrendingUp,
+  Activity, CreditCard, DollarSign, Calendar, RefreshCw
+} from "lucide-react";
 
 export default function AllTransactions() {
   const [filters, setFilters] = useState({
@@ -27,26 +32,60 @@ export default function AllTransactions() {
   // Safe data extraction - handle both direct array and nested response
   const transactionList = Array.isArray(transactions) ? transactions : [];
 
+  // Analytics calculations
+  const analytics = useMemo(() => {
+    const totalAmount = transactionList.reduce((sum: number, t: ITransaction) => sum + t.amount, 0);
+    const completedTransactions = transactionList.filter((t: ITransaction) => t.status === "completed");
+    const todayTransactions = transactionList.filter((t: ITransaction) => {
+      const today = new Date().toDateString();
+      const transactionDate = new Date(t.createdAt).toDateString();
+      return today === transactionDate;
+    });
+
+    return {
+      total: transactionList.length,
+      totalAmount,
+      completed: completedTransactions.length,
+      pending: transactionList.filter((t: ITransaction) => t.status === "pending").length,
+      failed: transactionList.filter((t: ITransaction) => t.status === "failed").length,
+      todayCount: todayTransactions.length,
+      averageAmount: transactionList.length > 0 ? totalAmount / transactionList.length : 0,
+      byType: {
+        cash_in: transactionList.filter((t: ITransaction) => t.type === "cash_in").length,
+        cash_out: transactionList.filter((t: ITransaction) => t.type === "cash_out").length,
+        send_money: transactionList.filter((t: ITransaction) => t.type === "send_money").length,
+        payment: transactionList.filter((t: ITransaction) => t.type === "payment").length,
+      }
+    };
+  }, [transactionList]);
+
   if (isLoading) {
     return (
-      <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-        <div className="container mx-auto px-4 md:px-6">
-          <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+      <div className="fintech-hero-bg min-h-screen">
+        <div className="fintech-container space-y-8 py-8">
+          <div className="text-center space-y-4 fintech-fade-in">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 backdrop-blur-sm mx-auto w-fit">
+              <Activity className="h-12 w-12 text-green-600" />
+            </div>
+            <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+              Transaction Analytics
+            </h1>
+          </div>
+          <Card variant="fintech">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-foreground">All Transactions</CardTitle>
+              <CardTitle className="text-2xl font-semibold">Loading Transactions...</CardTitle>
             </CardHeader>
             <CardContent>
-              <Table className="w-full bg-[var(--background)]/80 rounded-lg overflow-hidden">
+              <Table className="w-full">
                 <TableHeader>
-                  <TableRow className="bg-[var(--primary)]/10">
-                    <TableHead className="text-foreground font-semibold">TX ID</TableHead>
-                    <TableHead className="text-foreground font-semibold">Type</TableHead>
-                    <TableHead className="text-foreground font-semibold">Amount</TableHead>
-                    <TableHead className="text-foreground font-semibold">From</TableHead>
-                    <TableHead className="text-foreground font-semibold">To</TableHead>
-                    <TableHead className="text-foreground font-semibold">Status</TableHead>
-                    <TableHead className="text-foreground font-semibold">Date</TableHead>
-                    <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                  <TableRow className="bg-primary/5">
+                    <TableHead className="font-semibold">Transaction</TableHead>
+                    <TableHead className="font-semibold">Type</TableHead>
+                    <TableHead className="font-semibold">Amount</TableHead>
+                    <TableHead className="font-semibold">Parties</TableHead>
+                    <TableHead className="font-semibold">Status</TableHead>
+                    <TableHead className="font-semibold">Date</TableHead>
+                    <TableHead className="font-semibold">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -56,17 +95,25 @@ export default function AllTransactions() {
             </CardContent>
           </Card>
         </div>
-      </section>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-        <div className="container mx-auto px-4 md:px-6">
-          <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+      <div className="fintech-hero-bg min-h-screen">
+        <div className="fintech-container space-y-8 py-8">
+          <div className="text-center space-y-4 fintech-fade-in">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 backdrop-blur-sm mx-auto w-fit">
+              <Activity className="h-12 w-12 text-green-600" />
+            </div>
+            <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+              Transaction Analytics
+            </h1>
+          </div>
+          <Card variant="fintech">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-foreground">All Transactions</CardTitle>
+              <CardTitle className="text-2xl font-semibold">Error Loading Transactions</CardTitle>
             </CardHeader>
             <CardContent>
               <LoadingState
@@ -74,42 +121,19 @@ export default function AllTransactions() {
                 message="Failed to load transactions. Please try again."
               />
               <div className="text-center mt-4">
-                <Button onClick={() => window.location.reload()}>Retry</Button>
+                <Button variant="fintech-primary" onClick={() => window.location.reload()}>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Retry
+                </Button>
               </div>
             </CardContent>
           </Card>
         </div>
-      </section>
+      </div>
     );
   }
 
-  const getTypeStyle = (type: string) => {
-    switch (type) {
-      case "cash_in":
-        return "bg-[var(--success)]/20 text-[var(--success)]";
-      case "cash_out":
-        return "bg-[var(--destructive)]/20 text-[var(--destructive)]";
-      case "send_money":
-        return "bg-blue-500/20 text-blue-500";
-      case "payment":
-        return "bg-purple-500/20 text-purple-500";
-      default:
-        return "bg-[var(--muted)]/20 text-[var(--muted-foreground)]";
-    }
-  };
 
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-[var(--success)]/20 text-[var(--success)]";
-      case "pending":
-        return "bg-yellow-500/20 text-yellow-600";
-      case "failed":
-        return "bg-[var(--destructive)]/20 text-[var(--destructive)]";
-      default:
-        return "bg-[var(--muted)]/20 text-[var(--muted-foreground)]";
-    }
-  };
 
   const formatAmount = (amount: number, type: string) => {
     const prefix = type === "cash_in" ? "+" : "-";
@@ -126,110 +150,263 @@ export default function AllTransactions() {
   };
 
   return (
-    <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-      <div className="container mx-auto px-4 md:px-6">
-        <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold text-foreground">All Transactions</CardTitle>
-            <p className="text-muted-foreground mt-2">
-              {transactionList.length} transaction{transactionList.length !== 1 ? 's' : ''} found
-            </p>
-          </CardHeader>
-          <CardContent>
-            {/* Filters */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-6">
-              <div className="flex-1">
+    <div className="fintech-hero-bg min-h-screen">
+      <div className="fintech-container space-y-8 py-8">
+        {/* Page Header */}
+        <div className="text-center space-y-4 fintech-fade-in">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-green-500/20 to-emerald-500/10 backdrop-blur-sm mx-auto w-fit">
+            <Activity className="h-12 w-12 text-green-600" />
+          </div>
+          <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+            Transaction Analytics
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Monitor and analyze all platform transactions in real-time
+          </p>
+        </div>
+
+        {/* Analytics Cards */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 fintech-scale-in">
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20">
+                <TrendingUp className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold fintech-gradient-text">{analytics.total}</p>
+                <p className="text-sm text-muted-foreground">Total Transactions</p>
+              </div>
+            </div>
+          </Card>
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20">
+                <DollarSign className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-green-600">৳{analytics.totalAmount.toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Total Volume</p>
+              </div>
+            </div>
+          </Card>
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20">
+                <Calendar className="h-6 w-6 text-orange-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-orange-600">{analytics.todayCount}</p>
+                <p className="text-sm text-muted-foreground">Today's Transactions</p>
+              </div>
+            </div>
+          </Card>
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center space-x-4">
+              <div className="p-3 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20">
+                <CreditCard className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-purple-600">৳{Math.round(analytics.averageAmount).toLocaleString()}</p>
+                <p className="text-sm text-muted-foreground">Average Amount</p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Status Overview */}
+        <div className="grid gap-6 md:grid-cols-3 fintech-scale-in delay-200">
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-lg font-semibold text-green-600">{analytics.completed}</p>
+                <p className="text-sm text-muted-foreground">Completed</p>
+              </div>
+              <Badge variant="success" className="text-xs">
+                {analytics.total > 0 ? Math.round((analytics.completed / analytics.total) * 100) : 0}%
+              </Badge>
+            </div>
+          </Card>
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-lg font-semibold text-yellow-600">{analytics.pending}</p>
+                <p className="text-sm text-muted-foreground">Pending</p>
+              </div>
+              <Badge variant="pending" className="text-xs">
+                {analytics.total > 0 ? Math.round((analytics.pending / analytics.total) * 100) : 0}%
+              </Badge>
+            </div>
+          </Card>
+          <Card variant="fintech" className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-lg font-semibold text-red-600">{analytics.failed}</p>
+                <p className="text-sm text-muted-foreground">Failed</p>
+              </div>
+              <Badge variant="warning" className="text-xs">
+                {analytics.total > 0 ? Math.round((analytics.failed / analytics.total) * 100) : 0}%
+              </Badge>
+            </div>
+          </Card>
+        </div>
+
+        {/* Filters */}
+        <Card variant="fintech">
+          <CardContent className="p-6">
+            <div className="flex flex-col lg:flex-row gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search transactions..."
+                  placeholder="Search by transaction ID, sender, or receiver..."
                   value={filters.search}
                   onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                  className="bg-[var(--background)]/50"
+                  className="pl-10 border-border/50 bg-background/80 backdrop-blur-sm focus:border-primary/50 focus:ring-primary/20"
                 />
               </div>
-              <select
-                value={filters.type}
-                onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
-                className="w-full sm:w-40 bg-[var(--background)]/50 border border-[var(--border)] rounded-md px-3 py-2 text-sm"
-              >
-                <option value="all">All Types</option>
-                <option value="cash_in">Cash In</option>
-                <option value="cash_out">Cash Out</option>
-                <option value="send_money">Send Money</option>
-                <option value="payment">Payment</option>
-              </select>
-              <select
-                value={filters.status}
-                onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
-                className="w-full sm:w-40 bg-[var(--background)]/50 border border-[var(--border)] rounded-md px-3 py-2 text-sm"
-              >
-                <option value="all">All Status</option>
-                <option value="completed">Completed</option>
-                <option value="pending">Pending</option>
-                <option value="failed">Failed</option>
-              </select>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <select
+                    value={filters.type}
+                    onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+                    className="px-3 py-2 bg-background border border-border/50 rounded-md text-sm min-w-[120px]"
+                  >
+                    <option value="all">All Types</option>
+                    <option value="cash_in">Cash In</option>
+                    <option value="cash_out">Cash Out</option>
+                    <option value="send_money">Send Money</option>
+                    <option value="payment">Payment</option>
+                  </select>
+                </div>
+                <select
+                  value={filters.status}
+                  onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                  className="px-3 py-2 bg-background border border-border/50 rounded-md text-sm min-w-[120px]"
+                >
+                  <option value="all">All Status</option>
+                  <option value="completed">Completed</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
             </div>
+          </CardContent>
+        </Card>
 
+        {/* Transactions Table */}
+        <Card variant="fintech">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-xl font-semibold">
+                Transactions ({transactionList.length})
+              </CardTitle>
+              <Button variant="fintech-ghost" size="sm">
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Refresh
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
             {transactionList.length === 0 ? (
-              <LoadingState
-                type="card"
-                message="No transactions found"
-              />
+              <div className="text-center py-12">
+                <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-lg font-medium">No transactions found</p>
+                <p className="text-muted-foreground">
+                  {filters.search || filters.type !== "all" || filters.status !== "all"
+                    ? "Try adjusting your search or filter criteria"
+                    : "No transactions have been made yet"
+                  }
+                </p>
+              </div>
             ) : (
-              <Table className="w-full bg-[var(--background)]/80 rounded-lg overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-700">
-                <TableHeader>
-                  <TableRow className="bg-[var(--primary)]/10">
-                    <TableHead className="text-foreground font-semibold">TX ID</TableHead>
-                    <TableHead className="text-foreground font-semibold">Type</TableHead>
-                    <TableHead className="text-foreground font-semibold">Amount</TableHead>
-                    <TableHead className="text-foreground font-semibold">From</TableHead>
-                    <TableHead className="text-foreground font-semibold">To</TableHead>
-                    <TableHead className="text-foreground font-semibold">Status</TableHead>
-                    <TableHead className="text-foreground font-semibold">Date</TableHead>
-                    <TableHead className="text-foreground font-semibold">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {transactionList.map((transaction: ITransaction) => (
-                    <TableRow key={transaction._id} className="hover:bg-[var(--muted)]/20 transition-colors">
-                      <TableCell className="font-mono text-sm">
-                        {transaction._id.slice(-8)}
-                      </TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeStyle(transaction.type)}`}>
-                          {transaction.type.replace('_', ' ')}
-                        </span>
-                      </TableCell>
-                      <TableCell className={`font-semibold ${transaction.type === "cash_in" ? "text-[var(--success)]" : "text-[var(--destructive)]"
-                        }`}>
-                        {formatAmount(transaction.amount, transaction.type)}
-                      </TableCell>
-                      <TableCell className="text-foreground font-medium">
-                        {transaction.sender.name}
-                      </TableCell>
-                      <TableCell className="text-foreground font-medium">
-                        {transaction.receiver.name}
-                      </TableCell>
-                      <TableCell>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusStyle(transaction.status)}`}>
-                          {transaction.status}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-muted-foreground text-sm">
-                        {formatDate(transaction.createdAt)}
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm" className="text-[var(--primary)] hover:bg-[var(--primary)]/10">
-                          View
-                        </Button>
-                      </TableCell>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-primary/5">
+                      <TableHead className="font-semibold">Transaction Details</TableHead>
+                      <TableHead className="font-semibold">Type & Amount</TableHead>
+                      <TableHead className="font-semibold">Parties</TableHead>
+                      <TableHead className="font-semibold">Status</TableHead>
+                      <TableHead className="font-semibold">Date</TableHead>
+                      <TableHead className="font-semibold">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {transactionList.map((transaction: ITransaction) => (
+                      <TableRow key={transaction._id} className="hover:bg-primary/5 transition-colors">
+                        <TableCell>
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${transaction.type === "cash_in" ? "bg-green-500/20" :
+                              transaction.type === "cash_out" ? "bg-red-500/20" :
+                                transaction.type === "send_money" ? "bg-blue-500/20" :
+                                  "bg-purple-500/20"
+                              }`}>
+                              {transaction.type === "cash_in" ? (
+                                <ArrowDownLeft className="h-5 w-5 text-green-600" />
+                              ) : transaction.type === "cash_out" ? (
+                                <ArrowUpRight className="h-5 w-5 text-red-600" />
+                              ) : (
+                                <ArrowUpRight className="h-5 w-5 text-blue-600" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-medium">TX-{transaction._id.slice(-8).toUpperCase()}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {transaction.type.replace('_', ' ').toUpperCase()}
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <Badge variant={
+                              transaction.type === "cash_in" ? "success" :
+                                transaction.type === "cash_out" ? "warning" :
+                                  "secondary"
+                            } className="text-xs">
+                              {transaction.type.replace('_', ' ')}
+                            </Badge>
+                            <p className={`font-semibold ${transaction.type === "cash_in" ? "text-green-600" : "text-red-600"
+                              }`}>
+                              {formatAmount(transaction.amount, transaction.type)}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium">From: {transaction.sender.name}</p>
+                            <p className="text-sm font-medium">To: {transaction.receiver.name}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              transaction.status === "completed" ? "success" :
+                                transaction.status === "pending" ? "pending" :
+                                  "warning"
+                            }
+                            className="text-xs"
+                          >
+                            {transaction.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-sm">{formatDate(transaction.createdAt)}</p>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant="fintech-ghost" size="sm" className="h-8 w-8 p-0">
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             )}
           </CardContent>
         </Card>
       </div>
-    </section>
+    </div>
   );
 }
