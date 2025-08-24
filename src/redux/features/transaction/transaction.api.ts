@@ -1,24 +1,26 @@
-
 import { baseApi } from "@/redux/baseApi";
+import type { ITransaction, ITransactionResponse } from "@/types";
 
 export const transactionApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-      
-        getMyTransactions: builder.query({
+
+        getMyTransactions: builder.query<ITransaction[], { type?: string; status?: string }>({
             query: (transactionInfo) => ({
                 url: "/transaction/me",
                 method: "GET",
                 data: transactionInfo,
             }),
-            transformResponse: (response) => response.data
+            transformResponse: (response: ITransactionResponse) => response.data,
+            providesTags: ['Transactions'],
         }),
-        getAllTransactions: builder.query({
+        getAllTransactions: builder.query<ITransaction[], { type?: string; status?: string; search?: string }>({
             query: (params) => ({
                 url: "/transaction",
                 method: "GET",
-                params:params
+                params: params
             }),
-            transformResponse: (response) => response.data
+            transformResponse: (response: ITransactionResponse) => response.data,
+            providesTags: ['Transactions'],
         }),
     })
 })
