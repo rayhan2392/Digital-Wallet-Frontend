@@ -6,6 +6,7 @@ import HomePage from "@/pages/HomePage";
 import Login from "@/pages/Login";
 import Pricing from "@/pages/Pricing";
 import Register from "@/pages/Register";
+import NotFound from "@/pages/NotFound";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter } from "react-router";
 import { AdminSidebarItems } from "./AdminSidebarItems";
@@ -15,55 +16,72 @@ import Unauthorized from "@/pages/Unauthorized";
 import { withAuth } from "@/utils/WithAuth";
 import { role } from "@/constants/Role";
 import type { TRole } from "@/types";
+import { RouteErrorBoundary } from "@/components/common/RouteErrorBoundary";
 
 export const router = createBrowserRouter([
     {
         Component: App,
         path: "/",
+        errorElement: <RouteErrorBoundary />,
         children: [
             {
                 Component: HomePage,
-                path: "/"
+                path: "/",
+                errorElement: <RouteErrorBoundary />
             },
             {
                 Component: About,
-                path: "/about"
+                path: "/about",
+                errorElement: <RouteErrorBoundary />
             },
             {
                 Component: Features,
-                path: "/features"
+                path: "/features",
+                errorElement: <RouteErrorBoundary />
             },
             {
                 Component: Pricing,
-                path: "/pricing"
+                path: "/pricing",
+                errorElement: <RouteErrorBoundary />
             }
         ]
     },
     {
-        Component: withAuth(DashBoardLayout,role.admin as TRole),
+        Component: withAuth(DashBoardLayout, role.admin as TRole),
         path: "/admin",
-        children: [...generateRoutes(AdminSidebarItems)]
+        errorElement: <RouteErrorBoundary />,
+        children: [...generateRoutes(AdminSidebarItems, <RouteErrorBoundary />)]
     },
     {
-        Component: withAuth(DashBoardLayout,role.agent as TRole),
+        Component: withAuth(DashBoardLayout, role.agent as TRole),
         path: "/agent",
-        children: [...generateRoutes(AgentSidebarItems)]
+        errorElement: <RouteErrorBoundary />,
+        children: [...generateRoutes(AgentSidebarItems, <RouteErrorBoundary />)]
     },
     {
-        Component: withAuth(DashBoardLayout,role.user as TRole),
+        Component: withAuth(DashBoardLayout, role.user as TRole),
         path: "/user",
-        children: [...generateRoutes(UserSidebarItems)]
+        errorElement: <RouteErrorBoundary />,
+        children: [...generateRoutes(UserSidebarItems, <RouteErrorBoundary />)]
     },
     {
         Component: Login,
-        path: "/login"
+        path: "/login",
+        errorElement: <RouteErrorBoundary />
     },
     {
         Component: Register,
-        path: "/register"
+        path: "/register",
+        errorElement: <RouteErrorBoundary />
     },
     {
-        Component:Unauthorized,
-        path:"/unauthorized"
+        Component: Unauthorized,
+        path: "/unauthorized",
+        errorElement: <RouteErrorBoundary />
+    },
+    {
+        Component: NotFound,
+        path: "*",
+        errorElement: <RouteErrorBoundary />
     }
 ])

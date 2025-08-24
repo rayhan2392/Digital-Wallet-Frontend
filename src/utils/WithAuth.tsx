@@ -2,13 +2,17 @@ import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import type { TRole } from "@/types";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
+import { LoadingState } from "@/components/common/LoadingStates";
 
 export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
   return function AuthWrapper() {
-    const { data, isLoading } = useUserInfoQuery(undefined);
-   
+    const { data, isLoading, error } = useUserInfoQuery(undefined);
 
-    if (!isLoading && !data?.email) {
+    if (isLoading) {
+      return <LoadingState type="page" message="Checking authentication..." />;
+    }
+
+    if (error || (!isLoading && !data?.email)) {
       return <Navigate to="/login" />;
     }
 

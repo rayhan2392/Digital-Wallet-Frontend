@@ -1,28 +1,38 @@
-
 import { baseApi } from "@/redux/baseApi";
+import type { IUser, IApiResponse } from "@/types";
 
 export const adminApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        register: builder.mutation({
-            query: (userInfo) => ({
-                url: "/user/register",
-                method: "POST",
-                data: userInfo,
-            }),
-        }),
-        
-        getAllUsers: builder.query({
+        getAllUsers: builder.query<IApiResponse<IUser[]>, { role?: string }>({
             query: (params) => ({
                 url: "/user/all-users",
                 method: "GET",
-                params:params
+                params: params
             }),
-            // transformResponse: (response) => response.data
+            providesTags: ['Users'],
+        }),
+
+        approveAgent: builder.mutation<IApiResponse<IUser>, { id: string }>({
+            query: ({ id }) => ({
+                url: `/user/approve/${id}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Users'],
+        }),
+
+        suspendAgent: builder.mutation<IApiResponse<IUser>, { id: string }>({
+            query: ({ id }) => ({
+                url: `/user/suspend/${id}`,
+                method: "PATCH",
+            }),
+            invalidatesTags: ['Users'],
         }),
     })
 })
 
 
 export const {
-   useGetAllUsersQuery
+    useGetAllUsersQuery,
+    useApproveAgentMutation,
+    useSuspendAgentMutation
 } = adminApi
