@@ -9,6 +9,7 @@ export default function MyWallet() {
 
   return (
     <div>
+      {/* Overview with wallet balance, quick actions, and recent transactions */}
       {myWallet?.user?.name}
       Total Balance : {myWallet?.balance}
 

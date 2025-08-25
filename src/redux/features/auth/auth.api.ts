@@ -31,6 +31,14 @@ export const authApi = baseApi.injectEndpoints({
             }),
             transformResponse: (response) => response.data
         }),
+        agentInfo: builder.query({
+            query: (agentInfo) => ({
+                url: "/user/agents",
+                method: "GET",
+                data: agentInfo,
+            }),
+            transformResponse: (response) => response.data
+        }),
     })
 })
 
@@ -39,5 +47,6 @@ export const {
     useRegisterMutation,
     useLoginMutation,
     useUserInfoQuery,
-    useLogOutMutation
+    useLogOutMutation,
+    useAgentInfoQuery
 } = authApi
