@@ -1,5 +1,17 @@
+import { useGetMyWalletQuery } from "@/redux/features/wallet/wallet.api"
+
 export default function MyWallet() {
+
+
+  const { data: myWallet } = useGetMyWalletQuery(undefined);
+
+  console.log(myWallet);
+
   return (
-    <div>This is MyWallet component</div>
+    <div>
+      {myWallet?.user?.name}
+      Total Balance : {myWallet?.balance}
+
+    </div>
   )
 }

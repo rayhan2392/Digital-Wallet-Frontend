@@ -1,21 +1,21 @@
 import { toast } from "sonner"
 
 export function useErrorHandler() {
-    const handleError = (error: any, customMessage?: string) => {
+    const handleError = (error: unknown, customMessage?: string) => {
         console.error('Error:', error)
 
         // Extract error message from different error formats
         let message = customMessage
 
         if (!message) {
-            if (error?.data?.message) {
-                message = error.data.message
-            } else if (error?.message) {
-                message = error.message
+            if (error && typeof error === 'object' && 'data' in error && error.data && typeof error.data === 'object' && 'message' in error.data) {
+                message = String(error.data.message)
+            } else if (error && typeof error === 'object' && 'message' in error) {
+                message = String(error.message)
             } else if (typeof error === 'string') {
                 message = error
-            } else if (error?.response?.data?.message) {
-                message = error.response.data.message
+            } else if (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'data' in error.response && error.response.data && typeof error.response.data === 'object' && 'message' in error.response.data) {
+                message = String(error.response.data.message)
             } else {
                 message = "An unexpected error occurred"
             }
@@ -24,8 +24,9 @@ export function useErrorHandler() {
         toast.error(message)
     }
 
-    const handleApiError = (error: any) => {
-        const status = error?.status || error?.response?.status
+    const handleApiError = (error: unknown) => {
+        const status = (error && typeof error === 'object' && 'status' in error ? error.status : null) ||
+            (error && typeof error === 'object' && 'response' in error && error.response && typeof error.response === 'object' && 'status' in error.response ? error.response.status : null)
 
         switch (status) {
             case 401:

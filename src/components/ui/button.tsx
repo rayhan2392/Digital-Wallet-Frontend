@@ -20,6 +20,15 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
+        // 🏦 Fintech-specific variants
+        "fintech-primary":
+          "bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary text-primary-foreground font-semibold shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/40",
+        "fintech-ghost":
+          "bg-transparent hover:bg-primary/10 border border-primary/20 hover:border-primary/40 text-primary hover:text-primary transition-all duration-300 hover:scale-105",
+        "fintech-success":
+          "bg-gradient-to-r from-green-600 to-green-500 hover:from-green-500 hover:to-green-600 text-white font-semibold shadow-lg shadow-green-500/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-green-500/40",
+        "fintech-warning":
+          "bg-gradient-to-r from-yellow-600 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-white font-semibold shadow-lg shadow-yellow-500/25 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-yellow-500/40",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

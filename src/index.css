@@ -156,31 +156,356 @@
   }
 }
 
-@layer utilities {
-  /* Wallet-specific utilities */
-  .wallet-card {
-    @apply bg-gradient-to-br from-card to-muted/30 shadow-sm rounded-[var(--radius-lg)] transition-all duration-200 hover:shadow-md;
+@layer components {
+  /* 🏦 Fintech Design System Components */
+
+  /* Cards & Containers */
+  .fintech-card {
+    @apply bg-gradient-to-br from-card via-card to-muted/20 
+           shadow-lg shadow-primary/5 
+           rounded-[var(--radius-lg)] 
+           border border-border/50
+           transition-all duration-300 
+           hover:shadow-xl hover:shadow-primary/10 
+           hover:scale-[1.02] hover:-translate-y-1;
   }
+
+  .fintech-card-glass {
+    @apply bg-gradient-to-br from-card/80 via-card/60 to-muted/10
+           backdrop-blur-sm border border-border/30
+           rounded-[var(--radius-lg)]
+           shadow-2xl shadow-primary/10
+           transition-all duration-300
+           hover:shadow-primary/20;
+  }
+
+  .wallet-card {
+    @apply bg-gradient-to-br from-card via-card to-muted/20 
+           shadow-lg shadow-primary/5 
+           rounded-[var(--radius-lg)] 
+           border border-border/50
+           transition-all duration-300 
+           hover:shadow-xl hover:shadow-primary/10 
+           hover:scale-[1.02] hover:-translate-y-1;
+  }
+}
+
+@layer utilities {
+  /* 🏦 Fintech Design System Utilities */
+
+  /* Text & Typography */
+  .fintech-gradient-text {
+    @apply bg-gradient-to-r from-primary via-primary to-accent 
+           bg-clip-text text-transparent font-bold;
+  }
+
+  .fintech-heading {
+    @apply text-2xl md:text-3xl font-bold tracking-tight 
+           text-foreground/90;
+  }
+
+  .fintech-subheading {
+    @apply text-lg font-semibold text-muted-foreground;
+  }
+
+  /* Buttons & Interactive */
+  .fintech-button-primary {
+    @apply bg-gradient-to-r from-primary to-primary/90
+           hover:from-primary/90 hover:to-primary
+           text-primary-foreground font-semibold
+           shadow-lg shadow-primary/25
+           transition-all duration-300
+           hover:scale-105 hover:shadow-xl hover:shadow-primary/40;
+  }
+
+  .fintech-button-ghost {
+    @apply bg-transparent hover:bg-primary/10
+           border border-primary/20 hover:border-primary/40
+           text-primary hover:text-primary
+           transition-all duration-300
+           hover:scale-105;
+  }
+
+  /* Status & States */
   .balance-positive {
     @apply text-[var(--success)] font-semibold;
   }
+
   .balance-negative {
     @apply text-[var(--destructive)] font-semibold;
   }
+
+  .status-success {
+    @apply bg-gradient-to-r from-green-50 to-emerald-50 
+           text-green-700 border-green-200
+           dark:from-green-950/20 dark:to-emerald-950/20 
+           dark:text-green-400 dark:border-green-800/30;
+  }
+
+  .status-warning {
+    @apply bg-gradient-to-r from-yellow-50 to-amber-50 
+           text-yellow-700 border-yellow-200
+           dark:from-yellow-950/20 dark:to-amber-950/20 
+           dark:text-yellow-400 dark:border-yellow-800/30;
+  }
+
+  .status-error {
+    @apply bg-gradient-to-r from-red-50 to-rose-50 
+           text-red-700 border-red-200
+           dark:from-red-950/20 dark:to-rose-950/20 
+           dark:text-red-400 dark:border-red-800/30;
+  }
+
+  /* Animations & Transitions */
   .tx-pending {
-    @apply text-[var(--warning)];
+    @apply text-[var(--warning)] animate-pulse;
   }
+
   .tx-hover {
-    @apply hover:bg-accent/20 transition-colors duration-150;
+    @apply hover:bg-accent/20 transition-all duration-200 
+           hover:scale-[1.01] hover:shadow-sm;
   }
+
+  /* Enhanced Animations & Micro-interactions */
+  .fintech-fade-in {
+    @apply animate-in fade-in-0 duration-700 ease-out;
+  }
+
+  .fintech-slide-up {
+    @apply animate-in slide-in-from-bottom-4 duration-700 ease-out;
+  }
+
+  .fintech-scale-in {
+    @apply animate-in zoom-in-95 duration-500 ease-out;
+  }
+
+  .fintech-slide-right {
+    @apply animate-in slide-in-from-left-4 duration-600 ease-out;
+  }
+
+  .fintech-slide-left {
+    @apply animate-in slide-in-from-right-4 duration-600 ease-out;
+  }
+
+  .fintech-bounce-in {
+    @apply animate-in zoom-in-50 duration-800 ease-out;
+  }
+
+  /* Staggered animations for lists */
+  .fintech-stagger-1 {
+    animation-delay: 100ms;
+  }
+  .fintech-stagger-2 {
+    animation-delay: 200ms;
+  }
+  .fintech-stagger-3 {
+    animation-delay: 300ms;
+  }
+  .fintech-stagger-4 {
+    animation-delay: 400ms;
+  }
+  .fintech-stagger-5 {
+    animation-delay: 500ms;
+  }
+
+  /* Advanced hover effects */
+  .fintech-hover-lift {
+    @apply transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 
+           hover:shadow-xl hover:shadow-primary/20;
+  }
+
+  .fintech-hover-glow {
+    @apply transition-all duration-300 ease-out hover:shadow-lg hover:shadow-primary/25 
+           hover:bg-primary/5;
+  }
+
+  .fintech-hover-float {
+    @apply transition-transform duration-500 ease-out hover:-translate-y-2;
+  }
+
+  /* Special animations */
+  .fintech-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .fintech-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .fintech-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fintech-shimmer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+
+  .fintech-gradient-animate {
+    background-size: 200% 200%;
+    animation: gradient-flow 8s ease infinite;
+  }
+
+  /* Enhanced Layout & Spacing */
+  .fintech-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .fintech-section {
+    @apply py-8 sm:py-12 md:py-16 lg:py-20;
+  }
+
+  .fintech-grid {
+    @apply grid gap-4 sm:gap-6 md:gap-8 lg:gap-10;
+  }
+
+  /* Mobile-first responsive utilities */
+  .fintech-text-responsive {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  .fintech-heading-responsive {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  .fintech-card-padding {
+    @apply p-4 sm:p-6 lg:p-8;
+  }
+
+  .fintech-button-mobile {
+    @apply px-4 py-2 text-sm sm:px-6 sm:py-3 sm:text-base;
+  }
+
+  .fintech-spacing-mobile {
+    @apply space-y-4 sm:space-y-6 md:space-y-8;
+  }
+
+  /* Touch-friendly interactive elements */
+  .fintech-touch-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center;
+  }
+
+  .fintech-mobile-padding {
+    @apply px-2 sm:px-4 md:px-6 lg:px-8;
+  }
+
+  /* Utility Classes */
   .address-mono {
-    @apply font-mono tracking-tight text-sm;
+    @apply font-mono tracking-tight text-sm bg-muted/50 
+           px-2 py-1 rounded border;
   }
+
   .copy-button {
-    @apply text-[var(--muted-foreground)] hover:text-[var(--primary)] transition-colors duration-150;
+    @apply text-[var(--muted-foreground)] hover:text-[var(--primary)] 
+           transition-all duration-200 hover:scale-110;
   }
+
   .tx-loading {
     @apply animate-pulse;
+  }
+
+  .fintech-shadow {
+    @apply shadow-lg shadow-primary/5 hover:shadow-xl hover:shadow-primary/10 
+           transition-shadow duration-300;
+  }
+
+  .fintech-border {
+    @apply border border-border/50 hover:border-border 
+           transition-colors duration-300;
+  }
+
+  /* Background Patterns */
+  .fintech-bg-pattern {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(59, 130, 246, 0.15) 1px,
+      transparent 0
+    );
+    background-size: 20px 20px;
+  }
+
+  .fintech-hero-bg {
+    @apply bg-gradient-to-br from-background via-primary/5 to-background;
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(59, 130, 246, 0.15) 1px,
+      transparent 0
+    );
+    background-size: 20px 20px;
+  }
+}
+
+/* Custom Keyframes for Advanced Animations */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes bounce-gentle {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  40%,
+  43% {
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
   }
 }
 

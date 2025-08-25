@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, Home, ArrowLeft } from "lucide-react";
 
 export function RouteErrorBoundary() {
-    const error = useRouteError() as any;
+    const error = useRouteError() as Error & { status?: number; statusText?: string };
 
     console.error('Route error:', error);
 
@@ -25,7 +25,7 @@ export function RouteErrorBoundary() {
             };
         }
 
-        if (error?.status >= 500) {
+        if (error?.status && error.status >= 500) {
             return {
                 title: "Server Error",
                 message: "Something went wrong on our end. Please try again later.",

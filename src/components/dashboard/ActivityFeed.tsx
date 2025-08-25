@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import type { ITransaction, IUser } from "@/types";
 import {
@@ -32,7 +31,6 @@ interface ActivityItem {
 }
 
 export function ActivityFeed({ transactions, users, loading = false }: ActivityFeedProps) {
-    const activities: ActivityItem[] = [];
 
     // Add recent transactions (last 10)
     const recentTransactions = transactions
@@ -116,11 +114,13 @@ export function ActivityFeed({ transactions, users, loading = false }: ActivityF
 
     if (loading) {
         return (
-            <Card className="col-span-1">
+            <Card variant="fintech" className="col-span-1">
                 <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                        <AlertCircle className="h-5 w-5" />
-                        <span>Recent Activities</span>
+                        <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20">
+                            <AlertCircle className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <span className="fintech-gradient-text">Recent Activities</span>
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="flex items-center justify-center py-8">
@@ -131,11 +131,13 @@ export function ActivityFeed({ transactions, users, loading = false }: ActivityF
     }
 
     return (
-        <Card className="col-span-1">
+        <Card variant="fintech" className="col-span-1 relative overflow-hidden">
             <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                    <AlertCircle className="h-5 w-5" />
-                    <span>Recent Activities</span>
+                    <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500/20 to-cyan-500/20">
+                        <AlertCircle className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <span className="fintech-gradient-text">Recent Activities</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>

@@ -9,6 +9,9 @@ import { UserTableSkeleton } from "@/components/common/TableSkeleton";
 import { LoadingState } from "@/components/common/LoadingStates";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
 import type { IUser } from "@/types";
+import { Users, Search, Filter, UserX, UserCheck, Mail, Phone, Eye } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 export default function ManageUsers() {
     const { data: usersResponse, isLoading, error } = useGetAllUsersQuery({ role: "user" });
@@ -16,8 +19,29 @@ export default function ManageUsers() {
     const [unBlockUser, { isLoading: isUnBlocking }] = useUnBlockUserMutation();
     const [openDialog, setOpenDialog] = useState<{ id: string; action: "block" | "unblock"; userName: string } | null>(null);
     const { handleApiError } = useErrorHandler();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [statusFilter, setStatusFilter] = useState<"all" | "active" | "blocked">("all");
 
     const users = usersResponse?.data || [];
+
+    // Filter users based on search and status
+    const filteredUsers = users.filter((user: IUser) => {
+        const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.phone.includes(searchTerm);
+
+        const matchesStatus = statusFilter === "all" ||
+            (statusFilter === "active" && !user.isBlocked) ||
+            (statusFilter === "blocked" && user.isBlocked);
+
+        return matchesSearch && matchesStatus;
+    });
+
+    const stats = {
+        total: users.length,
+        active: users.filter((user: IUser) => !user.isBlocked).length,
+        blocked: users.filter((user: IUser) => user.isBlocked).length,
+    };
 
     const handleAction = async () => {
         if (!openDialog) return;
@@ -45,21 +69,29 @@ export default function ManageUsers() {
 
     if (isLoading) {
         return (
-            <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-                <div className="container mx-auto px-4 md:px-6">
-                    <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+            <div className="fintech-hero-bg min-h-screen">
+                <div className="fintech-container space-y-8 py-8">
+                    <div className="text-center space-y-4 fintech-fade-in">
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 backdrop-blur-sm mx-auto w-fit">
+                            <Users className="h-12 w-12 text-blue-600" />
+                        </div>
+                        <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+                            User Management
+                        </h1>
+                    </div>
+                    <Card variant="fintech">
                         <CardHeader className="text-center">
-                            <CardTitle className="text-3xl font-bold text-foreground">Manage Users</CardTitle>
+                            <CardTitle className="text-2xl font-semibold">Loading Users...</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <Table className="w-full bg-[var(--background)]/80 rounded-lg overflow-hidden">
+                            <Table className="w-full">
                                 <TableHeader>
-                                    <TableRow className="bg-[var(--primary)]/10">
-                                        <TableHead className="text-foreground font-semibold">Name</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Email</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Phone</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Status</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                                    <TableRow className="bg-primary/5">
+                                        <TableHead className="font-semibold">Name</TableHead>
+                                        <TableHead className="font-semibold">Email</TableHead>
+                                        <TableHead className="font-semibold">Phone</TableHead>
+                                        <TableHead className="font-semibold">Status</TableHead>
+                                        <TableHead className="font-semibold">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -69,17 +101,25 @@ export default function ManageUsers() {
                         </CardContent>
                     </Card>
                 </div>
-            </section>
+            </div>
         );
     }
 
     if (error) {
         return (
-            <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-                <div className="container mx-auto px-4 md:px-6">
-                    <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
+            <div className="fintech-hero-bg min-h-screen">
+                <div className="fintech-container space-y-8 py-8">
+                    <div className="text-center space-y-4 fintech-fade-in">
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 backdrop-blur-sm mx-auto w-fit">
+                            <Users className="h-12 w-12 text-blue-600" />
+                        </div>
+                        <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+                            User Management
+                        </h1>
+                    </div>
+                    <Card variant="fintech">
                         <CardHeader className="text-center">
-                            <CardTitle className="text-3xl font-bold text-foreground">Manage Users</CardTitle>
+                            <CardTitle className="text-2xl font-semibold">Error Loading Users</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <LoadingState
@@ -87,83 +127,207 @@ export default function ManageUsers() {
                                 message="Failed to load users. Please try again."
                             />
                             <div className="text-center mt-4">
-                                <Button onClick={() => window.location.reload()}>Retry</Button>
+                                <Button variant="fintech-primary" onClick={() => window.location.reload()}>
+                                    Retry
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
-            </section>
+            </div>
         );
     }
 
     return (
-        <section className="bg-gradient-to-br from-[var(--muted)]/50 via-[var(--primary)]/20 to-[var(--success)]/10 min-h-screen py-12 md:py-20">
-            <div className="container mx-auto px-4 md:px-6">
-                <Card className="wallet-card bg-[var(--card)]/90 backdrop-blur-sm border-[var(--border)] shadow-lg">
-                    <CardHeader className="text-center">
-                        <CardTitle className="text-3xl font-bold text-foreground">Manage Users</CardTitle>
-                        <p className="text-muted-foreground mt-2">
-                            {users.length} user{users.length !== 1 ? 's' : ''} registered
-                        </p>
+        <div className="fintech-hero-bg min-h-screen">
+            <div className="fintech-container space-y-8 py-8">
+                {/* Page Header */}
+                <div className="text-center space-y-4 fintech-fade-in">
+                    <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 backdrop-blur-sm mx-auto w-fit">
+                        <Users className="h-12 w-12 text-blue-600" />
+                    </div>
+                    <h1 className="fintech-gradient-text text-4xl font-bold tracking-tight">
+                        User Management
+                    </h1>
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                        Monitor and manage all registered users on the SwiftPay platform
+                    </p>
+                </div>
+
+                {/* Statistics Cards */}
+                <div className="grid gap-6 md:grid-cols-3 fintech-scale-in">
+                    <Card variant="fintech" className="p-6">
+                        <div className="flex items-center space-x-4">
+                            <div className="p-3 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20">
+                                <Users className="h-6 w-6 text-blue-600" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold fintech-gradient-text">{stats.total}</p>
+                                <p className="text-sm text-muted-foreground">Total Users</p>
+                            </div>
+                        </div>
+                    </Card>
+                    <Card variant="fintech" className="p-6">
+                        <div className="flex items-center space-x-4">
+                            <div className="p-3 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20">
+                                <UserCheck className="h-6 w-6 text-green-600" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-green-600">{stats.active}</p>
+                                <p className="text-sm text-muted-foreground">Active Users</p>
+                            </div>
+                        </div>
+                    </Card>
+                    <Card variant="fintech" className="p-6">
+                        <div className="flex items-center space-x-4">
+                            <div className="p-3 rounded-full bg-gradient-to-r from-red-500/20 to-rose-500/20">
+                                <UserX className="h-6 w-6 text-red-600" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-red-600">{stats.blocked}</p>
+                                <p className="text-sm text-muted-foreground">Blocked Users</p>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Search and Filter */}
+                <Card variant="fintech">
+                    <CardContent className="p-6">
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                <Input
+                                    placeholder="Search by name, email, or phone..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-10 border-border/50 bg-background/80 backdrop-blur-sm focus:border-primary/50 focus:ring-primary/20"
+                                />
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Filter className="h-4 w-4 text-muted-foreground" />
+                                <select
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "blocked")}
+                                    className="px-3 py-2 bg-background border border-border/50 rounded-md text-sm"
+                                >
+                                    <option value="all">All Status</option>
+                                    <option value="active">Active Only</option>
+                                    <option value="blocked">Blocked Only</option>
+                                </select>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Users Table */}
+                <Card variant="fintech">
+                    <CardHeader>
+                        <div className="flex items-center justify-between">
+                            <CardTitle className="text-xl font-semibold">
+                                Users ({filteredUsers.length})
+                            </CardTitle>
+                            {searchTerm || statusFilter !== "all" ? (
+                                <Badge variant="secondary" className="text-xs">
+                                    Filtered from {users.length} total
+                                </Badge>
+                            ) : null}
+                        </div>
                     </CardHeader>
                     <CardContent>
-                        {users.length === 0 ? (
-                            <LoadingState
-                                type="card"
-                                message="No users found"
-                            />
+                        {filteredUsers.length === 0 ? (
+                            <div className="text-center py-12">
+                                <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                                <p className="text-lg font-medium">No users found</p>
+                                <p className="text-muted-foreground">
+                                    {searchTerm || statusFilter !== "all"
+                                        ? "Try adjusting your search or filter criteria"
+                                        : "No users have registered yet"
+                                    }
+                                </p>
+                            </div>
                         ) : (
-                            <Table className="w-full bg-[var(--background)]/80 rounded-lg overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-700">
-                                <TableHeader>
-                                    <TableRow className="bg-[var(--primary)]/10">
-                                        <TableHead className="text-foreground font-semibold">Name</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Email</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Phone</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Status</TableHead>
-                                        <TableHead className="text-foreground font-semibold">Actions</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {users.map((user: IUser) => (
-                                        <TableRow key={user._id} className="hover:bg-[var(--muted)]/20 transition-colors">
-                                            <TableCell className="text-foreground">{user.name}</TableCell>
-                                            <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                                            <TableCell className="text-muted-foreground">{user.phone}</TableCell>
-                                            <TableCell className="text-foreground">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${user.isBlocked
-                                                    ? "bg-[var(--destructive)]/20 text-[var(--destructive)]"
-                                                    : "bg-[var(--success)]/20 text-[var(--success)]"
-                                                    }`}>
-                                                    {user.isBlocked ? "Blocked" : "Active"}
-                                                </span>
-                                            </TableCell>
-                                            <TableCell>
-                                                {user.isBlocked ? (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="border-[var(--success)] text-[var(--success)] hover:bg-[var(--success)]/10"
-                                                        onClick={() => setOpenDialog({ id: user._id, action: "unblock", userName: user.name })}
-                                                        disabled={isBlocking || isUnBlocking}
-                                                    >
-                                                        {isUnBlocking ? "Unblocking..." : "Unblock"}
-                                                    </Button>
-                                                ) : (
-                                                    <Button
-                                                        variant="outline"
-                                                        size="sm"
-                                                        className="border-[var(--destructive)] text-[var(--destructive)] hover:bg-[var(--destructive)]/10"
-                                                        onClick={() => setOpenDialog({ id: user._id, action: "block", userName: user.name })}
-                                                        disabled={isBlocking || isUnBlocking}
-                                                    >
-                                                        {isBlocking ? "Blocking..." : "Block"}
-                                                    </Button>
-                                                )}
-                                            </TableCell>
+                            <div className="overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-primary/5">
+                                            <TableHead className="font-semibold">User Details</TableHead>
+                                            <TableHead className="font-semibold">Contact</TableHead>
+                                            <TableHead className="font-semibold">Status</TableHead>
+                                            <TableHead className="font-semibold">Actions</TableHead>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {filteredUsers.map((user: IUser) => (
+                                            <TableRow key={user._id} className="hover:bg-primary/5 transition-colors">
+                                                <TableCell>
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-600 flex items-center justify-center text-white font-medium">
+                                                            {user.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                        <div>
+                                                            <p className="font-medium">{user.name}</p>
+                                                            <p className="text-sm text-muted-foreground">ID: {user._id.slice(-8)}</p>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center space-x-2">
+                                                            <Mail className="h-3 w-3 text-muted-foreground" />
+                                                            <span className="text-sm">{user.email}</span>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <Phone className="h-3 w-3 text-muted-foreground" />
+                                                            <span className="text-sm">{user.phone}</span>
+                                                        </div>
+                                                    </div>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Badge
+                                                        variant={user.isBlocked ? "warning" : "success"}
+                                                        className="text-xs"
+                                                    >
+                                                        {user.isBlocked ? "Blocked" : "Active"}
+                                                    </Badge>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <div className="flex space-x-2">
+                                                        <Button
+                                                            variant="fintech-ghost"
+                                                            size="sm"
+                                                            className="h-8 w-8 p-0"
+                                                        >
+                                                            <Eye className="h-4 w-4" />
+                                                        </Button>
+                                                        {user.isBlocked ? (
+                                                            <Button
+                                                                variant="fintech-success"
+                                                                size="sm"
+                                                                onClick={() => setOpenDialog({ id: user._id, action: "unblock", userName: user.name })}
+                                                                disabled={isBlocking || isUnBlocking}
+                                                            >
+                                                                <UserCheck className="h-4 w-4 mr-1" />
+                                                                Unblock
+                                                            </Button>
+                                                        ) : (
+                                                            <Button
+                                                                variant="fintech-warning"
+                                                                size="sm"
+                                                                onClick={() => setOpenDialog({ id: user._id, action: "block", userName: user.name })}
+                                                                disabled={isBlocking || isUnBlocking}
+                                                            >
+                                                                <UserX className="h-4 w-4 mr-1" />
+                                                                Block
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         )}
                     </CardContent>
                 </Card>
@@ -171,39 +335,68 @@ export default function ManageUsers() {
 
             {/* Confirmation Dialog */}
             <AlertDialog open={!!openDialog} onOpenChange={() => setOpenDialog(null)}>
-                <AlertDialogContent className="bg-[var(--card)] border-[var(--border)]">
+                <AlertDialogContent className="fintech-card border-primary/20">
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Confirm Action</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            Are you sure you want to {openDialog?.action} user <strong>{openDialog?.userName}</strong>?
-                            {openDialog?.action === 'block' && ' This will prevent them from accessing their account and performing transactions.'}
-                            {openDialog?.action === 'unblock' && ' This will restore their access to the platform.'}
+                        <div className="flex items-center space-x-3 mb-4">
+                            <div className={`p-3 rounded-full ${openDialog?.action === 'block'
+                                ? 'bg-red-500/20'
+                                : 'bg-green-500/20'
+                                }`}>
+                                {openDialog?.action === 'block' ? (
+                                    <UserX className="h-6 w-6 text-red-600" />
+                                ) : (
+                                    <UserCheck className="h-6 w-6 text-green-600" />
+                                )}
+                            </div>
+                            <div>
+                                <AlertDialogTitle className="text-xl">
+                                    {openDialog?.action === 'block' ? 'Block User' : 'Unblock User'}
+                                </AlertDialogTitle>
+                            </div>
+                        </div>
+                        <AlertDialogDescription className="text-base leading-relaxed">
+                            Are you sure you want to {openDialog?.action} <strong>{openDialog?.userName}</strong>?
+                            <br />
+                            <span className="text-sm text-muted-foreground mt-2 block">
+                                {openDialog?.action === 'block'
+                                    ? 'This will prevent them from accessing their account and performing transactions.'
+                                    : 'This will restore their full access to the platform.'
+                                }
+                            </span>
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel className="border-[var(--border)] text-muted-foreground hover:bg-[var(--muted)]">
-                            Cancel
+                    <AlertDialogFooter className="flex space-x-3">
+                        <AlertDialogCancel asChild>
+                            <Button variant="fintech-ghost">
+                                Cancel
+                            </Button>
                         </AlertDialogCancel>
-                        <AlertDialogAction
-                            className={`${openDialog?.action === 'unblock'
-                                ? "bg-[var(--success)] hover:bg-[var(--success)]/90"
-                                : "bg-[var(--destructive)] hover:bg-[var(--destructive)]/90"
-                                } text-white`}
-                            onClick={handleAction}
-                            disabled={isBlocking || isUnBlocking}
-                        >
-                            {isBlocking || isUnBlocking ? (
-                                <div className="flex items-center">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                    {openDialog?.action === 'block' ? 'Blocking...' : 'Unblocking...'}
-                                </div>
-                            ) : (
-                                `Confirm ${openDialog?.action}`
-                            )}
+                        <AlertDialogAction asChild>
+                            <Button
+                                variant={openDialog?.action === 'unblock' ? "fintech-success" : "fintech-warning"}
+                                onClick={handleAction}
+                                disabled={isBlocking || isUnBlocking}
+                            >
+                                {isBlocking || isUnBlocking ? (
+                                    <div className="flex items-center space-x-2">
+                                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />
+                                        <span>{openDialog?.action === 'block' ? 'Blocking...' : 'Unblocking...'}</span>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center space-x-2">
+                                        {openDialog?.action === 'block' ? (
+                                            <UserX className="h-4 w-4" />
+                                        ) : (
+                                            <UserCheck className="h-4 w-4" />
+                                        )}
+                                        <span>Confirm {openDialog?.action}</span>
+                                    </div>
+                                )}
+                            </Button>
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-        </section>
+        </div>
     );
 }

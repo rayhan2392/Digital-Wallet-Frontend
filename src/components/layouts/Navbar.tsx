@@ -28,7 +28,7 @@ const navigationLinks = [
   { href: "/admin", label: "Dashboard", role: role.admin },
   { href: "/agent", label: "Dashboard", role: role.agent },
   { href: "/user", label: "Dashboard", role: role.user },
-  
+
 ]
 
 export default function Navbar() {
@@ -43,8 +43,8 @@ export default function Navbar() {
 
 
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
+    <header className="fintech-border bg-background/95 backdrop-blur-md border-b px-4 md:px-6 sticky top-0 z-50 fintech-shadow">
+      <div className="fintech-container flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
@@ -104,7 +104,7 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                 {navigationLinks.map((link, index) => (
+                {navigationLinks.map((link, index) => (
                   <React.Fragment key={index}>
                     {link.role === "public" && (
                       <NavigationMenuItem>
@@ -143,7 +143,7 @@ export default function Navbar() {
           {/* User menu */}
           {
             data?.email &&
-            <Button onClick={handleLogOut}>
+            <Button onClick={handleLogOut} variant="fintech-ghost" className="font-semibold">
               Logout
             </Button>
           }
@@ -151,7 +151,7 @@ export default function Navbar() {
           {
             !data?.email &&
             <Link to={"/login"}>
-              <Button>Login</Button>
+              <Button variant="fintech-primary" className="font-semibold">Login</Button>
             </Link>
           }
         </div>

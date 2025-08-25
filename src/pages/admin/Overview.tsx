@@ -90,97 +90,108 @@ export default function Overview() {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in-50 duration-500">
-      {/* Page Header */}
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight flex items-center space-x-3">
-          <BarChart3 className="h-8 w-8 text-primary" />
-          <span>Dashboard Overview</span>
-        </h1>
-        <p className="text-muted-foreground">
-          Welcome back! Here's what's happening with your digital wallet platform.
-        </p>
-      </div>
+    <div className="min-h-screen fintech-hero-bg">
+      <div className="fintech-container space-y-8 py-8">
+        {/* Page Header */}
+        <div className="text-center space-y-4 fintech-fade-in">
+          <div className="flex items-center justify-center space-x-4">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 backdrop-blur-sm">
+              <BarChart3 className="h-12 w-12 text-primary" />
+            </div>
+          </div>
+          <h1 className="fintech-gradient-text text-4xl md:text-5xl font-bold tracking-tight">
+            SwiftPay Dashboard
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Welcome back! Here's your comprehensive overview of the SwiftPay fintech platform performance.
+          </p>
+        </div>
 
-      {/* Statistics Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatsCard
-          title="Total Users"
-          value={stats.totalUsers.toLocaleString()}
-          change={stats.userGrowth}
-          icon={<Users className="h-6 w-6" />}
-          gradient="blue"
-          className="animate-in slide-in-from-left-1 duration-300"
-        />
-        <StatsCard
-          title="Total Agents"
-          value={stats.totalAgents.toLocaleString()}
-          change={stats.agentGrowth}
-          icon={<Shield className="h-6 w-6" />}
-          gradient="green"
-          className="animate-in slide-in-from-left-2 duration-300 delay-75"
-        />
-        <StatsCard
-          title="Transactions"
-          value={stats.totalTransactions.toLocaleString()}
-          change={stats.transactionGrowth}
-          icon={<ArrowUpDown className="h-6 w-6" />}
-          gradient="purple"
-          className="animate-in slide-in-from-left-3 duration-300 delay-150"
-        />
-        <StatsCard
-          title="Total Volume"
-          value={`৳${(stats.totalVolume / 1000000).toFixed(1)}M`}
-          change={stats.volumeGrowth}
-          icon={<DollarSign className="h-6 w-6" />}
-          gradient="orange"
-          className="animate-in slide-in-from-left-4 duration-300 delay-225"
-        />
-      </div>
-
-      {/* Middle Section: Charts and Activity */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="animate-in slide-in-from-bottom-1 duration-500 delay-300">
-          <TransactionChart
-            transactions={transactions || []}
-            loading={transactionsLoading}
+        {/* Statistics Cards */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <StatsCard
+            title="Total Users"
+            value={stats.totalUsers.toLocaleString()}
+            change={stats.userGrowth}
+            icon={<Users className="h-7 w-7" />}
+            gradient="blue"
+            className="fintech-scale-in"
+          />
+          <StatsCard
+            title="Total Agents"
+            value={stats.totalAgents.toLocaleString()}
+            change={stats.agentGrowth}
+            icon={<Shield className="h-7 w-7" />}
+            gradient="green"
+            className="fintech-scale-in delay-75"
+          />
+          <StatsCard
+            title="Transactions"
+            value={stats.totalTransactions.toLocaleString()}
+            change={stats.transactionGrowth}
+            icon={<ArrowUpDown className="h-7 w-7" />}
+            gradient="purple"
+            className="fintech-scale-in delay-150"
+          />
+          <StatsCard
+            title="Total Volume"
+            value={`৳${(stats.totalVolume / 1000000).toFixed(1)}M`}
+            change={stats.volumeGrowth}
+            icon={<DollarSign className="h-7 w-7" />}
+            gradient="orange"
+            className="fintech-scale-in delay-225"
           />
         </div>
-        <div className="animate-in slide-in-from-bottom-2 duration-500 delay-375">
-          <ActivityFeed
-            transactions={transactions || []}
-            users={allUsers}
-            loading={transactionsLoading || usersLoading}
-          />
-        </div>
-      </div>
 
-      {/* Status Overview */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="animate-in slide-in-from-bottom-3 duration-500 delay-450">
-          <StatusCard
-            title="User Status"
-            users={regularUsers}
-            loading={regularUsersLoading}
-            type="users"
-          />
+        {/* Middle Section: Charts and Activity */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="fintech-slide-up delay-300">
+            <TransactionChart
+              transactions={transactions || []}
+              loading={transactionsLoading}
+            />
+          </div>
+          <div className="fintech-slide-up delay-375">
+            <ActivityFeed
+              transactions={transactions || []}
+              users={allUsers}
+              loading={transactionsLoading || usersLoading}
+            />
+          </div>
         </div>
-        <div className="animate-in slide-in-from-bottom-4 duration-500 delay-525">
-          <StatusCard
-            title="Agent Status"
-            users={agents}
-            loading={agentsLoading}
-            type="agents"
-          />
-        </div>
-      </div>
 
-      {/* Success Message */}
-      <div className="mt-8 p-4 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg animate-in slide-in-from-bottom-5 duration-500 delay-600">
-        <div className="flex items-center space-x-2">
-          <TrendingUp className="h-5 w-5 text-green-600" />
-          <p className="text-sm font-medium text-green-800">
-            Your platform is performing excellently! Keep up the great work.
+        {/* Status Overview */}
+        <div className="grid gap-8 lg:grid-cols-2">
+          <div className="fintech-slide-up delay-450">
+            <StatusCard
+              title="User Status"
+              users={regularUsers}
+              loading={regularUsersLoading}
+              type="users"
+            />
+          </div>
+          <div className="fintech-slide-up delay-525">
+            <StatusCard
+              title="Agent Status"
+              users={agents}
+              loading={agentsLoading}
+              type="agents"
+            />
+          </div>
+        </div>
+
+        {/* Success Message */}
+        <div className="fintech-card-glass p-8 text-center fintech-slide-up delay-600">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="p-3 rounded-full bg-gradient-to-r from-green-500 to-emerald-500">
+              <TrendingUp className="h-6 w-6 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-green-600 dark:text-green-400">
+              Platform Excellence
+            </h3>
+          </div>
+          <p className="text-lg font-medium text-green-700 dark:text-green-300">
+            🚀 SwiftPay is performing exceptionally! Your fintech platform is ready to scale.
           </p>
         </div>
       </div>
