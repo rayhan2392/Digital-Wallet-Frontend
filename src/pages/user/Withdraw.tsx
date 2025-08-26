@@ -26,7 +26,6 @@ import {
     Wallet,
     Info,
     Star,
-    ArrowLeft,
     MapPin,
     Phone,
     Clock
@@ -202,15 +201,7 @@ export default function Withdraw() {
                 {/* Header */}
                 <div className="text-center space-y-4 fintech-fade-in">
                     <div className="flex items-center justify-center space-x-4">
-                        <Button
-                            variant="fintech-ghost"
-                            size="sm"
-                            onClick={() => navigate("/user/my-wallet")}
-                            className="absolute left-4 top-8"
-                        >
-                            <ArrowLeft className="h-4 w-4 mr-2" />
-                            Back
-                        </Button>
+                        
                         <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-green-500/10 backdrop-blur-sm">
                             <ArrowDownToLine className="h-12 w-12 text-emerald-600" />
                         </div>

@@ -8,7 +8,7 @@ import Pricing from "@/pages/Pricing";
 import Register from "@/pages/Register";
 import NotFound from "@/pages/NotFound";
 import { generateRoutes } from "@/utils/generateRoutes";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { AdminSidebarItems } from "./AdminSidebarItems";
 import { AgentSidebarItems } from "./AgentSidebarItems";
 import { UserSidebarItems } from "./UserSidebarItems";
@@ -50,19 +50,19 @@ export const router = createBrowserRouter([
         Component: withAuth(DashBoardLayout, role.admin as TRole),
         path: "/admin",
         errorElement: <RouteErrorBoundary />,
-        children: [...generateRoutes(AdminSidebarItems, <RouteErrorBoundary />)]
+        children: [{ index: true, element: <Navigate to="/admin/overview" /> }, ...generateRoutes(AdminSidebarItems, <RouteErrorBoundary />)]
     },
     {
         Component: withAuth(DashBoardLayout, role.agent as TRole),
         path: "/agent",
         errorElement: <RouteErrorBoundary />,
-        children: [...generateRoutes(AgentSidebarItems, <RouteErrorBoundary />)]
+        children: [{ index: true, element: <Navigate to="/agent/overview" /> }, ...generateRoutes(AgentSidebarItems, <RouteErrorBoundary />)]
     },
     {
         Component: withAuth(DashBoardLayout, role.user as TRole),
         path: "/user",
         errorElement: <RouteErrorBoundary />,
-        children: [...generateRoutes(UserSidebarItems, <RouteErrorBoundary />)]
+        children: [{ index: true, element: <Navigate to="/user/my-wallet" /> }, ...generateRoutes(UserSidebarItems, <RouteErrorBoundary />)]
     },
     {
         Component: Login,

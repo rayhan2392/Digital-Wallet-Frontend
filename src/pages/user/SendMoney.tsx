@@ -24,7 +24,6 @@ import {
     Wallet,
     Info,
     Star,
-    ArrowLeft
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -182,15 +181,7 @@ export default function SendMoney() {
                 {/* Header */}
                 <div className="text-center space-y-4 fintech-fade-in">
                     <div className="flex items-center justify-center space-x-4">
-                        <Button
-                            variant="fintech-ghost"
-                            size="sm"
-                            onClick={() => navigate("/user/my-wallet")}
-                            className="absolute left-4 top-8"
-                        >
-                            <ArrowLeft className="h-4 w-4 mr-2" />
-                            Back
-                        </Button>
+                        
                         <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/20 to-cyan-500/10 backdrop-blur-sm">
                             <ArrowUpRight className="h-12 w-12 text-blue-600" />
                         </div>

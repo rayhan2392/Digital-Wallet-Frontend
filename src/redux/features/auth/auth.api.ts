@@ -16,12 +16,14 @@ export const authApi = baseApi.injectEndpoints({
                 method: "POST",
                 data: userInfo,
             }),
+            invalidatesTags: ['Users'], // Invalidate user info cache after login
         }),
         logOut: builder.mutation({
             query: () => ({
                 url: "/auth/logout",
                 method: "POST",
             }),
+            invalidatesTags: ['Users'], // Invalidate user info cache after logout
         }),
         userInfo: builder.query({
             query: (userInfo) => ({
@@ -29,7 +31,8 @@ export const authApi = baseApi.injectEndpoints({
                 method: "GET",
                 data: userInfo,
             }),
-            transformResponse: (response) => response.data
+            transformResponse: (response) => response.data,
+            providesTags: ['Users'] // Provide UserInfo tag for cache invalidation
         }),
         agentInfo: builder.query({
             query: (agentInfo) => ({
