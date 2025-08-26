@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { role } from "@/constants/Role";
 
 //  Zod schema for validation
 const loginSchema = z.object({
@@ -19,10 +20,33 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+// Helper function to get dashboard URL based on user role
+const getDashboardUrl = (userRole?: string) => {
+  const urlMap: Record<string, string> = {
+    [role.super_admin]: '/admin',
+    [role.admin]: '/admin',
+    [role.agent]: '/agent',
+    [role.user]: '/user'
+  };
+  return urlMap[userRole || ''] || '/';
+};
+
+// Helper function to get role display name
+const getRoleDisplayName = (userRole?: string) => {
+  const roleMap: Record<string, string> = {
+    [role.super_admin]: 'Super Admin',
+    [role.admin]: 'Administrator',
+    [role.agent]: 'Agent',
+    [role.user]: 'User'
+  };
+  return roleMap[userRole || ''] || 'User';
+};
+
 const LoginForm: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+
 
   //  useForm with Zod
   const form = useForm<LoginFormValues>({
@@ -43,21 +67,67 @@ const LoginForm: React.FC = () => {
       const toastId = toast.loading("Signing you in...", {
         description: "Please wait while we verify your credentials"
       });
+
       const res = await login(userInfo).unwrap();
+
       if (res.success) {
-        toast.success("Welcome back to SwiftPay!", {
-          id: toastId,
-          description: "You have been successfully signed in"
-        });
-        navigate("/")
+        // Get user role from the confirmed path
+        const userRole = res.data?.user?.role;
+
+        if (userRole) {
+          // Role found, proceed with navigation
+          const dashboardUrl = getDashboardUrl(userRole);
+          const roleName = getRoleDisplayName(userRole);
+
+          // Show success message with role info
+          toast.success("Welcome back to SwiftPay!", {
+            id: toastId,
+            description: `You have been successfully signed in as ${roleName}`
+          });
+
+          // Show redirect message
+          toast.info("Redirecting to your dashboard...", {
+            description: `Taking you to your ${roleName} dashboard`,
+            duration: 2000
+          });
+
+          // Navigate to dashboard after a longer delay to ensure auth state is updated
+          setTimeout(() => {
+            console.log("Executing navigation to:", dashboardUrl); // Debug log
+            try {
+              navigate(dashboardUrl);
+              console.log("Navigation executed successfully"); // Debug log
+            } catch (navError) {
+              console.error("Navigation failed:", navError); // Debug log
+              // Fallback: try to navigate to home
+              navigate('/');
+            }
+          }, 2500);
+        } else {
+          // Fallback: redirect to home if role is somehow missing
+          toast.success("Welcome back to SwiftPay!", {
+            id: toastId,
+            description: "You have been successfully signed in"
+          });
+
+          toast.info("Redirecting to home page...", {
+            description: "Your role information will be available shortly"
+          });
+
+          setTimeout(() => {
+            navigate('/');
+          }, 1500);
+        }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
       toast.error("Sign in failed", {
         description: "Please check your credentials and try again"
       });
     }
   };
+
+
 
   return (
     <CardContent className="space-y-6">

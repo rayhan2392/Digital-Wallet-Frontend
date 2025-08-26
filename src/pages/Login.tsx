@@ -1,13 +1,38 @@
 import LoginForm from "@/components/modules/authentication/LoginForm";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Lock, Shield } from "lucide-react";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
 import { SecurityBadge } from "@/components/fintech/SecurityBadge";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { role } from "@/constants/Role";
+import { LoadingState } from "@/components/common/LoadingStates";
 
+// Helper function to get dashboard URL based on user role
+const getDashboardUrl = (userRole?: string) => {
+  const urlMap: Record<string, string> = {
+    [role.super_admin]: '/admin',
+    [role.admin]: '/admin',
+    [role.agent]: '/agent',
+    [role.user]: '/user'
+  };
+  return urlMap[userRole || ''] || '/';
+};
 
 const Login: React.FC = () => {
+  const { data, isLoading } = useUserInfoQuery(undefined);
+
+  // If user is already authenticated, redirect to their dashboard
+  if (isLoading) {
+    return <LoadingState type="page" message="Checking authentication..." />;
+  }
+
+  if (data?.email && data?.role) {
+    const dashboardUrl = getDashboardUrl(data.role);
+    return <Navigate to={dashboardUrl} replace />;
+  }
+
   return (
     <div className="fintech-hero-bg min-h-screen flex items-center relative overflow-hidden">
       {/* Animated background elements */}
