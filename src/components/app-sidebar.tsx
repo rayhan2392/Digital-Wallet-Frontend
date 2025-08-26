@@ -15,11 +15,8 @@ import {
 import { getSidebarItems } from "@/utils/getSidebarItems"
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import { Link, useLocation } from "react-router"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
 import {
-  Wallet,
   ArrowUpRight,
   ArrowDownLeft,
   CreditCard,
@@ -28,7 +25,6 @@ import {
   Users,
   BarChart3,
   Home,
-  Building2,
   Zap
 } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -43,7 +39,7 @@ const getIconForNavItem = (title: string) => {
     'Transactions': BarChart3,
 
     // User icons  
-    'Wallet': Wallet,
+    'Wallet': CreditCard,
     'Send Money': ArrowUpRight,
     'Withdraw': ArrowDownLeft,
     'Update Profile': User,
@@ -77,10 +73,7 @@ const getRoleDisplayName = (role?: string) => {
   return roleMap[role || ''] || 'User'
 }
 
-const getInitials = (name?: string) => {
-  if (!name) return 'U'
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-}
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined)
@@ -152,55 +145,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-border/50 p-4">
-        <Card className="bg-gradient-to-br from-muted/50 to-muted/20 border-border/50">
-          <CardContent className="p-3">
-            <div className="flex items-center space-x-3">
-              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-                <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                  {getInitials(userData?.name)}
-                </AvatarFallback>
-              </Avatar>
-
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {userData?.name || 'User'}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {userData?.email || 'user@swiftpay.com'}
-                </p>
-              </div>
-            </div>
-
-            {/* Status indicator */}
-            <div className="mt-3 flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-xs text-muted-foreground">Online</span>
-              </div>
-
-              {userData?.role === 'user' && (
-                <Badge variant="outline" className="text-xs">
-                  <Wallet className="h-3 w-3 mr-1" />
-                  Active
-                </Badge>
-              )}
-
-              {userData?.role === 'agent' && (
-                <Badge variant="success" className="text-xs">
-                  <Shield className="h-3 w-3 mr-1" />
-                  Verified
-                </Badge>
-              )}
-
-              {(userData?.role === 'admin' || userData?.role === 'super_admin') && (
-                <Badge variant="default" className="text-xs">
-                  <Building2 className="h-3 w-3 mr-1" />
-                  Admin
-                </Badge>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+        <SidebarMenuButton
+          asChild
+          className="w-full justify-start gap-3 px-3 py-2.5 text-sm font-medium hover:bg-primary/10 hover:text-primary transition-colors"
+        >
+          <Link to="/" className="flex items-center gap-3">
+            <Home className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <span className="truncate">Go Home</span>
+          </Link>
+        </SidebarMenuButton>
       </SidebarFooter>
 
       <SidebarRail />
