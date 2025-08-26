@@ -22,7 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { ModeToggle } from "./mode-toggle"
-import { Link } from "react-router"
+import { Link, useLocation } from "react-router"
 import { authApi, useLogOutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import { useAppDispatch } from "@/redux/hook"
 import { useState } from "react"
@@ -68,11 +68,20 @@ const getDashboardUrl = (role?: string) => {
   return urlMap[role || ''] || '/'
 }
 
+// Utility function to scroll to top smoothly
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
 export default function Navbar() {
   const { data } = useUserInfoQuery(undefined)
   const [logout] = useLogOutMutation();
   const dispatch = useAppDispatch();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const location = useLocation();
 
   const handleLogOut = async () => {
     try {
@@ -87,6 +96,15 @@ export default function Navbar() {
 
   const openLogoutDialog = () => {
     setIsLogoutDialogOpen(true);
+  }
+
+  // Handle navigation link click with scroll to top
+  const handleNavLinkClick = (href: string) => {
+    // If clicking on the same page, scroll to top
+    if (location.pathname === href) {
+      scrollToTop();
+    }
+    // If navigating to a different page, the new page will start at the top
   }
 
   return (
@@ -134,7 +152,11 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink href={link.href} className="py-1.5">
+                      <NavigationMenuLink
+                        href={link.href}
+                        className="py-1.5 cursor-pointer"
+                        onClick={() => handleNavLinkClick(link.href)}
+                      >
                         {link.label}
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -159,9 +181,11 @@ export default function Navbar() {
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       asChild
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                      className="text-muted-foreground hover:text-primary py-1.5 font-medium cursor-pointer"
                     >
-                      <Link to={link.href}>{link.label}</Link>
+                      <Link to={link.href} onClick={() => handleNavLinkClick(link.href)}>
+                        {link.label}
+                      </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
