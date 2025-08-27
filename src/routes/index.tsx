@@ -22,7 +22,7 @@ export const router = createBrowserRouter([
     {
         Component: App,
         path: "/",
-        errorElement: <RouteErrorBoundary />,
+
         children: [
             {
                 Component: HomePage,
@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
     {
         Component: withAuth(DashBoardLayout, role.agent as TRole),
         path: "/agent",
-        errorElement: <RouteErrorBoundary />,
+
         children: [{ index: true, element: <Navigate to="/agent/overview" /> }, ...generateRoutes(AgentSidebarItems, <RouteErrorBoundary />)]
     },
     {

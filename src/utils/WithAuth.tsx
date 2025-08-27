@@ -3,6 +3,7 @@ import type { TRole } from "@/types";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
 import { LoadingState } from "@/components/common/LoadingStates";
+import NotApproved from "@/pages/NotApproved";
 
 export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
   return function AuthWrapper() {
@@ -18,6 +19,11 @@ export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
 
     if (requiredRole && !isLoading && requiredRole !== data?.role) {
       return <Navigate to="/unauthorized" />;
+    }
+
+    // Check if user is approved for dashboard access
+    if (!data?.isApproved) {
+      return <NotApproved />;
     }
 
     return <Component />;

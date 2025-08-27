@@ -70,7 +70,22 @@ const LoginForm: React.FC = () => {
 
       const res = await login(userInfo).unwrap();
 
+      console.log(res);
+
       if (res.success) {
+
+        if (!res.data?.user?.isApproved) {
+          toast.warning("Account Not Approved", {
+            id: toastId,
+            description: "You can stay logged in but dashboard access is restricted"
+          });
+
+          // Navigate to home page
+          setTimeout(() => {
+            navigate('/');
+          }, 1500);
+          return;
+        }
         // Get user role from the confirmed path
         const userRole = res.data?.user?.role;
 
@@ -93,10 +108,10 @@ const LoginForm: React.FC = () => {
 
           // Navigate to dashboard after a longer delay to ensure auth state is updated
           setTimeout(() => {
-            console.log("Executing navigation to:", dashboardUrl); // Debug log
+
             try {
               navigate(dashboardUrl);
-              console.log("Navigation executed successfully"); // Debug log
+
             } catch (navError) {
               console.error("Navigation failed:", navError); // Debug log
               // Fallback: try to navigate to home

@@ -26,6 +26,7 @@ const getBreadcrumbs = (pathname: string, userRole?: string) => {
   const breadcrumbs = [{ label: 'Dashboard', href: `/${userRole}`, icon: Home }]
 
   if (segments.length > 1) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const routeMap: Record<string, { label: string; icon: any }> = {
       // Admin routes
       'overview': { label: 'Overview', icon: Home },

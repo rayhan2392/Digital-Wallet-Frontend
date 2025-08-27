@@ -30,7 +30,9 @@ export default function AllTransactions() {
   const { data: transactions = [], isLoading, error } = useGetAllTransactionsQuery(queryParams);
 
   // Safe data extraction - handle both direct array and nested response
-  const transactionList = Array.isArray(transactions) ? transactions : [];
+  const transactionList = useMemo(() => {
+    return Array.isArray(transactions) ? transactions : [];
+  }, [transactions]);
 
   // Analytics calculations
   const analytics = useMemo(() => {

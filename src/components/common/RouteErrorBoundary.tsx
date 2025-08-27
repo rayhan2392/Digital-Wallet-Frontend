@@ -7,9 +7,11 @@ export function RouteErrorBoundary() {
     const error = useRouteError() as Error & { status?: number; statusText?: string };
 
     console.error('Route error:', error);
+    console.log(error);
 
     const getErrorMessage = () => {
         if (error?.status === 404) {
+            console.log(error)
             return {
                 title: "Page Not Found",
                 message: "The page you're looking for doesn't exist or has been moved.",
@@ -32,7 +34,7 @@ export function RouteErrorBoundary() {
                 showBackButton: true
             };
         }
-
+           console.log(error)
         return {
             title: "Something went wrong",
             message: error?.statusText || error?.message || "An unexpected error occurred.",

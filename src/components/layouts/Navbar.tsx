@@ -85,7 +85,7 @@ export default function Navbar() {
 
   const handleLogOut = async () => {
     try {
-      await logout(undefined);
+      await logout("");
       dispatch(authApi.util.resetApiState());
       toast.success("Successfully logged out! 👋");
       setIsLogoutDialogOpen(false);

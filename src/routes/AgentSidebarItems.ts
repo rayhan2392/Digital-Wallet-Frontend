@@ -10,7 +10,7 @@ export const AgentSidebarItems: ISidebarItem[] = [
         items: [
             {
                 title: "Overiview",
-                url: "/agent/overiview",
+                url: "/agent/overview",
                 component: AgentOverview
             },
             {

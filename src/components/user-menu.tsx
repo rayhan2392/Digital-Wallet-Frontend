@@ -97,7 +97,7 @@ export default function UserMenu() {
       dispatch(authApi.util.resetApiState())
       toast.success("Successfully signed out", { id: toastId })
       navigate('/login')
-    } catch (error) {
+    } catch {
       toast.error("Failed to sign out")
     }
   }

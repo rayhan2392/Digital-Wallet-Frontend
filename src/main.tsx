@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')!).render(
             richColors
             position="top-right"
             toastOptions={{
-              duration: 4000,
+              duration: 2000,
               style: {
                 background: 'var(--card)',
                 border: '1px solid var(--border)',
