@@ -22,7 +22,7 @@ export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
     }
 
     // Check if user is approved for dashboard access
-    if (!data?.isApproved) {
+    if ( !isLoading && data?.role==="agent" && data?.isApproved===false) {
       return <NotApproved />;
     }
 

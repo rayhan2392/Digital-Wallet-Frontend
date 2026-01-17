@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
 
       if (res.success) {
 
-        if (!res.data?.user?.isApproved) {
+        if ( res.data?.user?.role==="agent" && res.data?.user?.isApproved===false) {
           toast.warning("Account Not Approved", {
             id: toastId,
             description: "You can stay logged in but dashboard access is restricted"
