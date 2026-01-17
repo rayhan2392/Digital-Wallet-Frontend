@@ -376,8 +376,8 @@ export default function AllTransactions() {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <p className="text-sm font-medium">From: {transaction.sender.name}</p>
-                            <p className="text-sm font-medium">To: {transaction.receiver.name}</p>
+                            <p className="text-sm font-medium">From: {transaction?.sender?.name}</p>
+                            <p className="text-sm font-medium">To: {transaction?.receiver?.name}</p>
                           </div>
                         </TableCell>
                         <TableCell>

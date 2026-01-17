@@ -85,7 +85,7 @@ export function ActivityFeed({ transactions, users, loading = false }: ActivityF
                 id: transaction._id,
                 type: 'transaction',
                 title: `${formatType(transaction.type)} Transaction`,
-                description: `${transaction.sender.name} → ${transaction.receiver.name}`,
+                description: `${transaction?.sender?.name} → ${transaction?.receiver?.name}`,
                 time: new Date(transaction.createdAt).toLocaleTimeString(),
                 icon: getTransactionIcon(transaction.type, transaction.status),
                 color: getTransactionColor(transaction.type, transaction.status),
@@ -101,7 +101,7 @@ export function ActivityFeed({ transactions, users, loading = false }: ActivityF
             id: `user-${user._id}`,
             type: 'user_activity',
             title: 'New User Registration',
-            description: `${user.name} joined as ${user.role}`,
+            description: `${user?.name} joined as ${user.role}`,
             time: new Date().toLocaleTimeString(), // Since we don't have createdAt
             icon: <CheckCircle className="h-4 w-4" />,
             color: 'text-blue-600 bg-blue-50',
