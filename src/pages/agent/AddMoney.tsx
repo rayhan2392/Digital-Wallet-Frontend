@@ -40,14 +40,14 @@ const addMoneySchema = z.object({
         .min(1, "Amount is required")
         .refine((val) => !isNaN(Number(val)), "Please enter a valid number")
         .refine((val) => Number(val) > 0, "Amount must be greater than 0")
-        .refine((val) => Number(val) >= 50, "Minimum cash-in amount is ৳50")
+        .refine((val) => Number(val) >= 5, "Minimum cash-in amount is ৳5")
         .refine((val) => Number(val) <= 100000, "Maximum cash-in amount is ৳100,000 per transaction")
 });
 
 type AddMoneyFormData = z.infer<typeof addMoneySchema>;
 
 // Quick amount suggestions for agents
-const quickAmounts = [500, 1000, 2000, 5000, 10000, 20000];
+const quickAmounts = [5, 10, 50, 100, 500, 1000];
 
 export default function AddMoney() {
     const navigate = useNavigate();
@@ -60,7 +60,7 @@ export default function AddMoney() {
 
     const form = useForm<AddMoneyFormData>({
         resolver: zodResolver(addMoneySchema),
-        mode: "onChange",
+        mode: "onTouched",
         defaultValues: {
             userPhone: "",
             amount: ""
@@ -68,18 +68,14 @@ export default function AddMoney() {
     });
 
     const watchedAmount = form.watch("amount");
-
-    // Form validation state
-    const { isValid } = form.formState;
+    const watchedPhone = form.watch("userPhone");
 
     // Calculate transaction details
     const transactionDetails = useMemo(() => {
         const amount = Number(watchedAmount) || 0;
-        const agentCommission = amount > 0 ? Math.max(amount * 0.002, 2) : 0; // 0.2% commission, minimum ৳2
 
         return {
             amount,
-            commission: agentCommission,
             customerReceives: amount
         };
     }, [watchedAmount]);
@@ -224,7 +220,7 @@ export default function AddMoney() {
                                                         <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                                         <Input
                                                             type="number"
-                                                            placeholder="Enter amount (৳50 - ৳100,000)"
+                                                            placeholder="Enter amount (৳5 - ৳100,000)"
                                                             min="0"
                                                             {...field}
                                                             onInput={(e) => {
@@ -261,7 +257,9 @@ export default function AddMoney() {
                                                     onClick={() => handleQuickAmount(amount)}
                                                     className={cn(
                                                         "h-10 text-xs font-medium transition-all duration-200",
-                                                        watchedAmount === amount.toString() && "border-primary bg-primary/10 text-primary"
+                                                        watchedAmount === amount.toString()
+                                                            ? "border-primary bg-primary/10 text-primary"
+                                                            : "hover:border-primary/50 hover:bg-primary/5"
                                                     )}
                                                 >
                                                     ৳{amount.toLocaleString()}
@@ -273,7 +271,7 @@ export default function AddMoney() {
                                     {/* Submit Button */}
                                     <Button
                                         type="submit"
-                                        disabled={!isValid || isProcessing}
+                                        disabled={isProcessing || !watchedPhone.trim() || !watchedAmount.trim()}
                                         className="w-full h-12 text-base font-semibold fintech-slide-up delay-300"
                                     >
                                         {isProcessing ? (
@@ -324,16 +322,6 @@ export default function AddMoney() {
                                         />
                                     </div>
 
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-sm text-muted-foreground">Agent Commission</span>
-                                        <CurrencyDisplay
-                                            amount={transactionDetails.commission}
-                                            size="sm"
-                                            variant="positive"
-                                            showSign
-                                        />
-                                    </div>
-
                                     <Separator />
 
                                     <div className="flex justify-between items-center font-semibold">
@@ -348,8 +336,8 @@ export default function AddMoney() {
 
                                 <div className="bg-muted/50 rounded-lg p-3">
                                     <div className="flex items-center space-x-2 text-xs text-muted-foreground">
-                                        <Info className="h-3 w-3" />
-                                        <span>Commission: 0.2% (min ৳2)</span>
+                                        <CheckCircle className="h-3 w-3 text-green-500" />
+                                        <span>No fees - Customer gets full amount</span>
                                     </div>
                                 </div>
                             </CardContent>
@@ -415,12 +403,11 @@ export default function AddMoney() {
                                         />
                                     </div>
                                     <div className="flex justify-between">
-                                        <span className="text-sm font-medium">Your Commission:</span>
+                                        <span className="text-sm font-medium">Customer Receives:</span>
                                         <CurrencyDisplay
-                                            amount={Math.max(Number(formData.amount) * 0.002, 2)}
+                                            amount={Number(formData.amount)}
                                             size="sm"
                                             variant="positive"
-                                            showSign
                                         />
                                     </div>
                                 </div>

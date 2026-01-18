@@ -74,10 +74,11 @@ const RegisterForm: React.FC = () => {
       password: data.password
     }
 
+    const toastId = toast.loading("Creating your account...", {
+      description: "Setting up your SwiftPay wallet"
+    });
+
     try {
-      const toastId = toast.loading("Creating your account...", {
-        description: "Setting up your SwiftPay wallet"
-      });
       const res = await register(userInfo).unwrap();
 
       if (res.success) {
@@ -141,10 +142,18 @@ const RegisterForm: React.FC = () => {
           }, 1500);
         }
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Registration failed", {
-        description: "Please check your information and try again"
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Registration error:", error);
+
+      // Extract error message from API response
+      const errorMessage = error?.data?.message || error?.message || "Registration failed";
+      const errorDescription = error?.data?.error || "Please check your information and try again";
+
+      toast.error(errorMessage, {
+        id: toastId,
+        description: errorDescription,
+        duration: 4000,
       });
     }
   };

@@ -52,7 +52,7 @@ const createWithdrawSchema = (availableBalance: number) => z.object({
         .min(1, "Amount is required")
         .refine((val) => !isNaN(Number(val)), "Please enter a valid number")
         .refine((val) => Number(val) > 0, "Amount must be greater than 0")
-        .refine((val) => Number(val) >= 50, "Minimum withdrawal amount is ৳50")
+        .refine((val) => Number(val) >= 5, "Minimum withdrawal amount is ৳5")
         .refine((val) => Number(val) <= 25000, "Maximum withdrawal amount is ৳25,000 per transaction")
         .refine((val) => {
             const amount = Number(val);
@@ -65,7 +65,7 @@ const createWithdrawSchema = (availableBalance: number) => z.object({
 type WithdrawFormData = z.infer<ReturnType<typeof createWithdrawSchema>>;
 
 // Quick amount suggestions for withdrawal
-const quickAmounts = [500, 1000, 2000, 5000, 10000];
+const quickAmounts = [5, 10, 30, 50, 100];
 
 export default function Withdraw() {
     const navigate = useNavigate();
@@ -81,7 +81,7 @@ export default function Withdraw() {
 
     const form = useForm<WithdrawFormData>({
         resolver: zodResolver(createWithdrawSchema(availableBalance)),
-        mode: "onChange", // Validate on change for real-time feedback
+        mode: "onTouched", // Validate only after user interacts with field
         defaultValues: {
             agent: "",
             amount: ""
@@ -90,18 +90,14 @@ export default function Withdraw() {
 
     // Update form resolver when balance changes
     useEffect(() => {
-        if (availableBalance > 0) {
-            form.clearErrors(); // Clear previous errors
-            // Re-trigger validation with new balance
-            form.trigger();
+        if (availableBalance > 0 && form.formState.isSubmitted) {
+            // Only re-validate amount if form was already submitted
+            form.trigger("amount");
         }
     }, [availableBalance, form]);
 
     const watchedAmount = form.watch("amount");
     const watchedAgent = form.watch("agent");
-
-    // Form validation state
-    const { isValid } = form.formState;
 
     // Calculate fees and final amounts
     const transactionDetails = useMemo(() => {
@@ -201,7 +197,7 @@ export default function Withdraw() {
                 {/* Header */}
                 <div className="text-center space-y-4 fintech-fade-in">
                     <div className="flex items-center justify-center space-x-4">
-                        
+
                         <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-green-500/10 backdrop-blur-sm">
                             <ArrowDownToLine className="h-12 w-12 text-emerald-600" />
                         </div>
@@ -338,8 +334,10 @@ export default function Withdraw() {
                                                     type="button"
                                                     onClick={() => selectQuickAmount(amount)}
                                                     className={cn(
-                                                        "p-3 rounded-lg border text-sm font-medium",
-                                                        Number(watchedAmount) === amount && "border-primary bg-primary/10 text-primary"
+                                                        "p-3 rounded-lg border text-sm font-medium transition-colors",
+                                                        Number(watchedAmount) === amount
+                                                            ? "border-primary bg-primary/10 text-primary"
+                                                            : "border-border/50 hover:border-primary/50 hover:bg-primary/5"
                                                     )}
                                                 >
                                                     ৳{amount}
@@ -422,18 +420,11 @@ export default function Withdraw() {
                                                 type="submit"
                                                 variant="fintech-primary"
                                                 size="lg"
-                                                className={cn(
-                                                    "w-full fintech-slide-up delay-900",
-                                                    (!isValid || !transactionDetails.canAfford || transactionDetails.amount === 0) && "opacity-50 cursor-not-allowed"
-                                                )}
-                                                disabled={!isValid || !transactionDetails.canAfford || isWithdrawing || transactionDetails.amount === 0}
+                                                className="w-full fintech-slide-up delay-900"
+                                                disabled={isWithdrawing || !watchedAgent.trim() || !watchedAmount.trim()}
                                             >
                                                 <ArrowDownToLine className="h-5 w-5 mr-2" />
-                                                {isWithdrawing ? "Processing..." :
-                                                    !watchedAgent.trim() || !watchedAmount.trim() ? "Complete Form" :
-                                                        !isValid ? "Invalid Details" :
-                                                            !transactionDetails.canAfford ? "Insufficient Balance" :
-                                                                "Withdraw Cash"}
+                                                {isWithdrawing ? "Processing..." : "Withdraw Cash"}
                                             </Button>
                                         </AlertDialogTrigger>
 
