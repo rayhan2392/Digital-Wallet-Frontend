@@ -1,10 +1,9 @@
 import LoginForm from "@/components/modules/authentication/LoginForm";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Shield, Lock, CheckCircle } from "lucide-react";
+import { ArrowLeft, ShieldCheck, UserCircle, Briefcase } from "lucide-react";
 import { Link, Navigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import Logo from "@/components/logo";
-import { SecurityBadge } from "@/components/fintech/SecurityBadge";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { role } from "@/constants/Role";
 import { LoadingState } from "@/components/common/LoadingStates";
@@ -23,6 +22,34 @@ const getDashboardUrl = (userRole?: string) => {
 const Login: React.FC = () => {
   const { data, isLoading } = useUserInfoQuery(undefined);
 
+  // Demo credentials
+  const demoCredentials = [
+    {
+      role: 'Admin',
+      email: 'test@admin.com',
+      password: 'admin1234',
+      icon: ShieldCheck,
+      color: 'from-purple-600 to-indigo-600',
+      badgeColor: 'bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-200 dark:border-purple-500/20'
+    },
+    {
+      role: 'Agent',
+      email: 'test@agent.com',
+      password: '123456',
+      icon: Briefcase,
+      color: 'from-green-600 to-emerald-600',
+      badgeColor: 'bg-green-500/10 text-green-700 dark:text-green-400 border-green-200 dark:border-green-500/20'
+    },
+    {
+      role: 'User',
+      email: 'test@user.com',
+      password: '123456',
+      icon: UserCircle,
+      color: 'from-blue-600 to-cyan-600',
+      badgeColor: 'bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-500/20'
+    }
+  ];
+
   // If user is already authenticated, redirect to their dashboard
   if (isLoading) {
     return <LoadingState type="page" message="Checking authentication..." />;
@@ -40,107 +67,72 @@ const Login: React.FC = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(59,130,246,0.1)_1px,transparent_0)] bg-[length:24px_24px]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* Left Side - Welcome Content */}
-          <div className="space-y-8 order-2 lg:order-1">
-            {/* Back Button */}
-            <Button variant="ghost" size="sm" asChild className="w-fit text-muted-foreground hover:text-foreground hover:bg-muted/50">
-              <Link to="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
+      {/* Back Button - Fixed Position */}
+      <div className="absolute top-6 left-6 z-20">
+        <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-slate-800/50">
+          <Link to="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Link>
+        </Button>
+      </div>
+
+      {/* Demo Buttons - Fixed Position Right Side */}
+      <div className="absolute top-6 right-6 z-20 flex flex-col gap-2">
+        <p className="text-xs text-slate-600 dark:text-slate-400 text-right mb-1 font-medium">
+          Quick Demo:
+        </p>
+        {demoCredentials.map((demo) => (
+          <Button
+            key={demo.role}
+            type="button"
+            size="sm"
+            onClick={() => {
+              if (window.fillLoginForm) {
+                window.fillLoginForm(demo.email, demo.password);
+              }
+            }}
+            className={`bg-gradient-to-r ${demo.color} text-white hover:opacity-90 shadow-md transition-all duration-200 w-24`}
+          >
+            <demo.icon className="h-3.5 w-3.5 mr-1.5" />
+            {demo.role}
+          </Button>
+        ))}
+      </div>
+
+      <div className="relative z-10 w-full max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Login Form */}
+        <Card className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-2xl shadow-slate-900/10 dark:shadow-slate-900/50">
+          <CardHeader className="text-center pb-4 pt-10">
+            <div className="flex justify-center mb-6">
+              <Logo />
+            </div>
+            <CardTitle className="text-3xl font-bold mb-2 text-slate-900 dark:text-slate-100">
+              Welcome Back
+            </CardTitle>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">
+              Sign in to your SwiftPay account
+            </p>
+          </CardHeader>
+
+          <LoginForm />
+
+          {/* Footer Links */}
+          <div className="px-8 pb-10 pt-2 text-center space-y-4">
+            <div className="text-sm text-slate-600 dark:text-slate-400">
+              Don't have an account?{" "}
+              <Link to="/register" className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+                Sign up here
               </Link>
-            </Button>
-
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <Logo />
-              </div>
-
-              <div className="space-y-5">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                  <span className="text-slate-900 dark:text-slate-100">Welcome</span>
-                  <br />
-                  <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Back</span>
-                </h1>
-                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-md">
-                  Sign in to your SwiftPay account and continue your financial journey
-                  with Bangladesh's most trusted digital wallet.
-                </p>
-              </div>
             </div>
-
-            {/* Trust Indicators */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-2 text-slate-600 dark:text-slate-400">
-                <CheckCircle className="h-5 w-5 text-green-500" />
-                <span className="text-sm font-medium">Trusted by 1M+ users</span>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                <SecurityBadge type="ssl" size="sm" />
-                <SecurityBadge type="encrypted" size="sm" />
-                <SecurityBadge type="verified" size="sm" />
-              </div>
-            </div>
-
-            {/* Features */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <div className="flex items-start space-x-4 p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-                <div className="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
-                  <Shield className="h-6 w-6 text-green-600 dark:text-green-400" />
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Secure Login</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Protected by 2FA</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-4 p-4 rounded-xl bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-                <div className="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0">
-                  <Lock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Encrypted Data</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Bank-level security</p>
-                </div>
-              </div>
+            <div className="text-xs text-slate-500 dark:text-slate-500">
+              By signing in, you agree to our{" "}
+              <Link to="/terms" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Terms</Link>
+              {" and "}
+              <Link to="/privacy" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Privacy Policy</Link>
             </div>
           </div>
-
-          {/* Right Side - Login Form */}
-          <div className="order-1 lg:order-2">
-            <Card className="max-w-md mx-auto bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-0 shadow-2xl shadow-slate-900/10 dark:shadow-slate-900/50">
-              <CardHeader className="text-center pb-8 pt-8">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 mx-auto mb-6 flex items-center justify-center shadow-lg">
-                  <Lock className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-3xl font-bold mb-3 text-slate-900 dark:text-slate-100">
-                  Sign In
-                </CardTitle>
-                <p className="text-slate-600 dark:text-slate-400">
-                  Enter your credentials to access your account
-                </p>
-              </CardHeader>
-
-              <LoginForm />
-
-              {/* Footer Links */}
-              <div className="px-8 pb-8 text-center space-y-4">
-                <div className="text-sm text-slate-600 dark:text-slate-400">
-                  Don't have an account?{" "}
-                  <Link to="/register" className="font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
-                    Sign up here
-                  </Link>
-                </div>
-                <div className="text-xs text-slate-500 dark:text-slate-500">
-                  By signing in, you agree to our{" "}
-                  <Link to="/terms" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Terms</Link>
-                  {" and "}
-                  <Link to="/privacy" className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors">Privacy Policy</Link>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
+        </Card>
       </div>
     </div>
   );
