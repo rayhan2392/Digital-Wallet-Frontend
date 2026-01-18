@@ -73,17 +73,19 @@ const benefits = [
 
 const Features: React.FC = () => {
   return (
-    <div className="fintech-hero-bg">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header Section */}
-      <section className="fintech-section">
-        <div className="fintech-container text-center">
-          <div className="space-y-6 fintech-fade-in">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-              <span className="fintech-gradient-text">Powerful Features</span>
+      <section className="relative py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-6">
+            <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight">
+              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Powerful Features
+              </span>
               <br />
-              <span className="text-foreground/80">Built for You</span>
+              <span className="text-slate-600 dark:text-slate-400 text-3xl md:text-4xl font-medium">Built for You</span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
               Experience the future of digital banking with cutting-edge features designed
               to make your financial life simpler, faster, and more secure.
             </p>
@@ -92,15 +94,13 @@ const Features: React.FC = () => {
       </section>
 
       {/* Main Features Grid */}
-      <section className="fintech-section">
-        <div className="fintech-container">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+      <section className="relative py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature, index) => (
               <Card
                 key={index}
-                variant="fintech"
-                className="group hover:scale-105 transition-all duration-300 fintech-scale-in"
-                style={{ animationDelay: `${index * 100}ms` }}
+                className="group hover:scale-105 transition-all duration-300 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg hover:shadow-xl"
               >
                 <CardHeader className="text-center pb-4">
                   <div className={`mx-auto w-16 h-16 rounded-2xl bg-gradient-to-r ${feature.gradient} p-4 mb-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -125,9 +125,9 @@ const Features: React.FC = () => {
       </section>
 
       {/* Benefits Section */}
-      <section className="fintech-section bg-gradient-to-br from-muted/30 to-primary/5">
-        <div className="fintech-container">
-          <div className="text-center mb-16 fintech-fade-in">
+      <section className="relative py-20 bg-white/50 dark:bg-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Why Choose <span className="fintech-gradient-text">SwiftPay</span>?
             </h2>
@@ -136,13 +136,11 @@ const Features: React.FC = () => {
             </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-16">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-12">
             {benefits.map((benefit, index) => (
               <Card
                 key={index}
-                variant="glass"
-                className="text-center p-6 fintech-slide-up"
-                style={{ animationDelay: `${index * 150}ms` }}
+                className="text-center p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 shadow-md hover:shadow-lg transition-shadow"
               >
                 <div className="w-12 h-12 rounded-full bg-primary/10 mx-auto mb-4 flex items-center justify-center">
                   <benefit.icon className="h-6 w-6 text-primary" />
@@ -154,19 +152,19 @@ const Features: React.FC = () => {
           </div>
 
           {/* CTA Section */}
-          <div className="text-center fintech-scale-in delay-700">
-            <Card variant="fintech" className="p-8 md:p-12 max-w-2xl mx-auto">
+          <div className="text-center">
+            <Card className="p-8 md:p-12 max-w-2xl mx-auto bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white border-0 shadow-2xl">
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Ready to Get Started?
               </h3>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-blue-100 mb-8">
                 Join over 50,000 users who have already made the switch to SwiftPay
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="fintech-primary" size="lg" className="px-8">
+                <Button size="lg" className="px-8 bg-white text-blue-600 hover:bg-blue-50 font-semibold">
                   Create Account
                 </Button>
-                <Button variant="fintech-ghost" size="lg" className="px-8">
+                <Button size="lg" className="px-8 border-2 border-white text-white hover:bg-white/20 font-semibold bg-transparent">
                   Learn More
                 </Button>
               </div>

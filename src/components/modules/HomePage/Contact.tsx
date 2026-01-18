@@ -23,33 +23,33 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="fintech-section bg-gradient-to-br from-primary/5 to-green-500/5">
-      <div className="fintech-container">
-        <div className="text-center mb-16 fintech-fade-in">
+    <section className="relative py-20 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Get in <span className="fintech-gradient-text">Touch</span>
+            Get in <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Touch</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Have questions about SwiftPay? We're here to help you 24/7
           </p>
         </div>
 
-        <div className="max-w-2xl mx-auto fintech-scale-in">
-          <Card variant="fintech">
+        <div className="max-w-2xl mx-auto">
+          <Card className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg">
             <CardHeader className="text-center pb-6">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 mx-auto mb-6 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mb-6 flex items-center justify-center">
                 <Mail className="h-8 w-8 text-white" />
               </div>
               <CardTitle className="text-2xl font-bold">
                 Contact SwiftPay
               </CardTitle>
-              <p className="text-muted-foreground">
+              <p className="text-slate-600 dark:text-slate-400">
                 Send us a message and we'll respond within 24 hours
               </p>
             </CardHeader>
             <CardContent>
               {submitted ? (
-                <p className="text-[var(--success)] text-center font-semibold">
+                <p className="text-green-600 dark:text-green-400 text-center font-semibold text-lg">
                   Thank you! Your message has been sent.
                 </p>
               ) : (
@@ -89,7 +89,7 @@ const Contact: React.FC = () => {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90"
+                    className="w-full h-12 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white shadow-lg font-semibold"
                   >
                     Send Message
                   </Button>

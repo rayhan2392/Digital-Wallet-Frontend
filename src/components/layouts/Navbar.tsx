@@ -30,7 +30,7 @@ import { Zap, User, Home, LogOut } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 
-// Navigation links array (public only)
+// Navigation links array
 const navigationLinks = [
   { href: "/", label: "Home" },
   { href: "/features", label: "Features" },
@@ -108,8 +108,8 @@ export default function Navbar() {
   }
 
   return (
-    <header className="fintech-border bg-background/95 backdrop-blur-md border-b px-4 md:px-6 sticky top-0 z-50 fintech-shadow">
-      <div className="fintech-container flex h-16 items-center justify-between gap-4">
+    <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-700/50 px-4 md:px-6 sticky top-0 z-50 shadow-sm">
+      <div className="max-w-7xl mx-auto flex h-16 items-center justify-between gap-4">
         {/* Left side */}
         <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
@@ -167,21 +167,26 @@ export default function Navbar() {
           </Popover>
           {/* Main nav */}
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center space-x-3 text-primary hover:text-primary/90">
-              {/* SwiftPay Icon - Same as sidebar */}
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg">
-                <Zap className="h-6 w-6 text-white" />
+            <Link to="/" className="flex items-center space-x-2 group">
+              {/* SwiftPay Icon */}
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-200">
+                <Zap className="h-5 w-5 text-white" />
               </div>
-              <span className="font-bold text-lg fintech-gradient-text">SwiftPay</span>
+              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                SwiftPay
+              </span>
             </Link>
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
-              <NavigationMenuList className="gap-2">
+              <NavigationMenuList className="gap-1">
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
                       asChild
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium cursor-pointer"
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${location.pathname === link.href
+                          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
                     >
                       <Link to={link.href} onClick={() => handleNavLinkClick(link.href)}>
                         {link.label}
@@ -285,9 +290,23 @@ export default function Navbar() {
               </PopoverContent>
             </Popover>
           ) : (
-            <Link to={"/login"}>
-              <Button variant="fintech-primary" className="font-semibold">Login</Button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/login">
+                <Button
+                  variant="ghost"
+                  className="font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
+                >
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button
+                  className="font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg transition-all duration-200"
+                >
+                  Get Started
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
       </div>
