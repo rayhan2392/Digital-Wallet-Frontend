@@ -63,18 +63,17 @@ const LoginForm: React.FC = () => {
       password: data.password,
     };
 
-    try {
-      const toastId = toast.loading("Signing you in...", {
-        description: "Please wait while we verify your credentials"
-      });
+    const toastId = toast.loading("Signing you in...", {
+      description: "Please wait while we verify your credentials"
+    });
 
+    try {
       const res = await login(userInfo).unwrap();
 
-      console.log(res);
 
       if (res.success) {
 
-        if ( res.data?.user?.role==="agent" && res.data?.user?.isApproved===false) {
+        if (res.data?.user?.role === "agent" && res.data?.user?.isApproved === false) {
           toast.warning("Account Not Approved", {
             id: toastId,
             description: "You can stay logged in but dashboard access is restricted"
@@ -134,10 +133,18 @@ const LoginForm: React.FC = () => {
           }, 1500);
         }
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Sign in failed", {
-        description: "Please check your credentials and try again"
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      
+
+      // Extract error message from API response
+      const errorMessage = error?.data?.message || error?.message || "Sign in failed";
+      const errorDescription = error?.data?.error || "Please check your credentials and try again";
+
+      toast.error(errorMessage, {
+        id: toastId,
+        description: errorDescription,
+        duration: 4000,
       });
     }
   };
