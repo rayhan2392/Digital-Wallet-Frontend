@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Heart, Target, Eye, Award, Users, Globe, TrendingUp, Shield } from "lucide-react";
 import { Link } from "react-router";
-import { SecurityBadge } from "@/components/fintech/SecurityBadge";
 
 const values = [
   {

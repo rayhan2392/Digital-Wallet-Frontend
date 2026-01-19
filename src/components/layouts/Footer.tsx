@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { Shield, Mail, MapPin, Twitter, Linkedin, Github } from "lucide-react";
-import { SecurityBadge } from "@/components/fintech/SecurityBadge";
 import Logo from "@/components/logo";
 
 const footerLinks = [
