@@ -9,6 +9,7 @@ export const authApi = baseApi.injectEndpoints({
                 method: "POST",
                 data: userInfo,
             }),
+            invalidatesTags: ['Users'], // Invalidate user info cache after registration
         }),
         login: builder.mutation({
             query: (userInfo) => ({

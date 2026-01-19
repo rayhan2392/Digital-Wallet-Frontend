@@ -9,8 +9,15 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { role } from "@/constants/Role";
+
+// Extend Window interface for fillLoginForm
+declare global {
+  interface Window {
+    fillLoginForm?: (email: string, password: string) => void;
+  }
+}
 
 //  Zod schema for validation
 const loginSchema = z.object({
@@ -42,11 +49,16 @@ const getRoleDisplayName = (userRole?: string) => {
   return roleMap[userRole || ''] || 'User';
 };
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  demoCredentials?: { email: string; password: string; role: string }[];
+  selectedDemo?: string | null;
+  onDemoFill?: (email: string, password: string) => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = () => {
   const [login, { isLoading }] = useLoginMutation();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
 
   //  useForm with Zod
   const form = useForm<LoginFormValues>({
@@ -57,24 +69,35 @@ const LoginForm: React.FC = () => {
     },
   });
 
+  // Expose form setValue to window for demo buttons
+  useEffect(() => {
+    window.fillLoginForm = (email: string, password: string) => {
+      form.setValue('email', email, { shouldValidate: true });
+      form.setValue('password', password, { shouldValidate: true });
+    };
+
+    return () => {
+      delete window.fillLoginForm;
+    };
+  }, [form]);
+
   const onSubmit = async (data: LoginFormValues) => {
     const userInfo = {
       email: data.email,
       password: data.password,
     };
 
-    try {
-      const toastId = toast.loading("Signing you in...", {
-        description: "Please wait while we verify your credentials"
-      });
+    const toastId = toast.loading("Signing you in...", {
+      description: "Please wait while we verify your credentials"
+    });
 
+    try {
       const res = await login(userInfo).unwrap();
 
-      console.log(res);
 
       if (res.success) {
 
-        if ( res.data?.user?.role==="agent" && res.data?.user?.isApproved===false) {
+        if (res.data?.user?.role === "agent" && res.data?.user?.isApproved === false) {
           toast.warning("Account Not Approved", {
             id: toastId,
             description: "You can stay logged in but dashboard access is restricted"
@@ -134,10 +157,18 @@ const LoginForm: React.FC = () => {
           }, 1500);
         }
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast.error("Sign in failed", {
-        description: "Please check your credentials and try again"
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+
+
+      // Extract error message from API response
+      const errorMessage = error?.data?.message || error?.message || "Sign in failed";
+      const errorDescription = error?.data?.error || "Please check your credentials and try again";
+
+      toast.error(errorMessage, {
+        id: toastId,
+        description: errorDescription,
+        duration: 4000,
       });
     }
   };
@@ -145,9 +176,9 @@ const LoginForm: React.FC = () => {
 
 
   return (
-    <CardContent className="space-y-8 px-8">
+    <CardContent className="space-y-5 px-10 pb-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {/* Email */}
           <FormField
             control={form.control}

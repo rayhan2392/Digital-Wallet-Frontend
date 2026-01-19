@@ -99,30 +99,28 @@ const feeStructure = [
 
 const Pricing: React.FC = () => {
   return (
-    <div className="fintech-hero-bg">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Section */}
-      <section className="fintech-section">
-        <div className="fintech-container text-center">
-          <div className="space-y-8 fintech-fade-in">
+      <section className="relative py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-                <span className="fintech-gradient-text">Simple</span>
-                <span className="text-foreground"> Pricing</span>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight">
+                <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">Simple Pricing</span>
                 <br />
-                <span className="text-3xl md:text-4xl text-muted-foreground font-medium">
+                <span className="text-slate-600 dark:text-slate-400 text-3xl md:text-4xl font-medium">
                   No Hidden Fees
                 </span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Choose the plan that fits your needs. From individuals to enterprises, 
+              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                Choose the plan that fits your needs. From individuals to enterprises,
                 we offer transparent pricing with no surprises.
               </p>
             </div>
 
             <Button
-              variant="fintech-primary"
               size="lg"
-              className="text-lg px-8 py-6"
+              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white shadow-lg"
               asChild
             >
               <Link to="/register">
@@ -135,21 +133,18 @@ const Pricing: React.FC = () => {
       </section>
 
       {/* Pricing Tiers */}
-      <section className="fintech-section">
-        <div className="fintech-container">
-          <div className="grid gap-8 lg:grid-cols-3">
+      <section className="relative py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-6 md:grid-cols-3 mb-16">
             {pricingTiers.map((tier, index) => (
               <Card
                 key={index}
-                variant={tier.popular ? "fintech" : "fintech"}
-                className={`relative group hover:scale-105 transition-all duration-300 fintech-scale-in ${
-                  tier.popular ? "ring-2 ring-primary/50 shadow-2xl shadow-primary/20" : ""
-                }`}
-                style={{ animationDelay: `${index * 200}ms` }}
+                className={`relative group hover:scale-105 transition-all duration-300 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg ${tier.popular ? "ring-2 ring-blue-500 shadow-2xl shadow-blue-500/20" : ""
+                  }`}
               >
                 {tier.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-gradient-to-r from-primary to-blue-600 text-white px-4 py-1 text-sm font-semibold">
+                    <Badge className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-1 text-sm font-semibold">
                       <Star className="w-3 h-3 mr-1" />
                       Most Popular
                     </Badge>
@@ -167,11 +162,11 @@ const Pricing: React.FC = () => {
                     {tier.description}
                   </p>
                   <div className="space-y-1">
-                    <div className="text-4xl font-bold fintech-gradient-text">
+                    <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                       {tier.price}
                     </div>
                     {tier.period && (
-                      <div className="text-muted-foreground text-sm">
+                      <div className="text-slate-600 dark:text-slate-400 text-sm">
                         {tier.period}
                       </div>
                     )}
@@ -189,8 +184,7 @@ const Pricing: React.FC = () => {
                   </ul>
 
                   <Button
-                    variant={tier.popular ? "fintech-primary" : "fintech-ghost"}
-                    className="w-full"
+                    className={`w-full ${tier.popular ? 'bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white' : 'border-2 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
                     size="lg"
                     asChild
                   >
@@ -206,13 +200,13 @@ const Pricing: React.FC = () => {
       </section>
 
       {/* Fee Structure */}
-      <section className="fintech-section bg-gradient-to-br from-muted/30 to-primary/5">
-        <div className="fintech-container">
-          <div className="text-center mb-16 fintech-fade-in">
+      <section className="relative py-20 bg-white/50 dark:bg-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Detailed <span className="fintech-gradient-text">Fee Structure</span>
+              Detailed <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Fee Structure</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Complete breakdown of all fees and charges
             </p>
           </div>
@@ -221,14 +215,12 @@ const Pricing: React.FC = () => {
             {feeStructure.map((service, index) => (
               <Card
                 key={index}
-                variant="glass"
-                className="fintech-slide-up"
-                style={{ animationDelay: `${index * 150}ms` }}
+                className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 shadow-md"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <service.icon className="h-6 w-6 text-primary" />
+                    <div className="w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                      <service.icon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <CardTitle className="text-xl">{service.service}</CardTitle>
                   </div>
@@ -259,7 +251,7 @@ const Pricing: React.FC = () => {
               Ready to Save on <span className="fintech-gradient-text">Transaction Fees</span>?
             </h3>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Join thousands of users who have already switched to SwiftPay's transparent pricing. 
+              Join thousands of users who have already switched to SwiftPay's transparent pricing.
               No hidden fees, no surprises.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

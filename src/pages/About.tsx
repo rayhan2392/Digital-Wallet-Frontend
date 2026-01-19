@@ -72,35 +72,27 @@ const teamMembers = [
 
 const About: React.FC = () => {
   return (
-    <div className="fintech-hero-bg">
+    <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Section */}
-      <section className="fintech-section">
-        <div className="fintech-container text-center">
-          <div className="space-y-8 fintech-fade-in">
+      <section className="relative py-20 lg:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
-                <span className="text-foreground">About</span>
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight">
+                <span className="text-slate-800 dark:text-slate-200">About</span>
                 <br />
-                <span className="fintech-gradient-text">SwiftPay</span>
+                <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">SwiftPay</span>
               </h1>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-3xl mx-auto leading-relaxed">
                 Revolutionizing digital payments in Bangladesh. We're not just a wallet –
                 we're your financial companion, building a more inclusive and accessible
                 financial ecosystem for everyone.
               </p>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex justify-center flex-wrap gap-4">
-              <SecurityBadge type="ssl" size="md" />
-              <SecurityBadge type="encrypted" size="md" />
-              <SecurityBadge type="verified" size="md" />
-            </div>
-
             <Button
-              variant="fintech-primary"
               size="lg"
-              className="text-lg px-8 py-6"
+              className="text-lg px-8 py-6 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 text-white shadow-lg"
               asChild
             >
               <Link to="/register">
@@ -113,22 +105,22 @@ const About: React.FC = () => {
       </section>
 
       {/* Company Story */}
-      <section className="fintech-section bg-gradient-to-br from-muted/30 to-primary/5">
-        <div className="fintech-container">
-          <Card variant="fintech" className="max-w-4xl mx-auto fintech-scale-in">
+      <section className="relative py-16 bg-white/50 dark:bg-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="max-w-4xl mx-auto bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg">
             <CardContent className="p-8 md:p-12">
               <div className="text-center space-y-6">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-primary to-blue-600 mx-auto flex items-center justify-center">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto flex items-center justify-center">
                   <Award className="h-10 w-10 text-white" />
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold">Our Story</h2>
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                   Founded in 2023 in the heart of Dhaka, SwiftPay was born from a simple yet powerful vision:
                   to make digital payments accessible to every Bangladeshi. What started as a small team of
                   passionate fintech enthusiasts has grown into Bangladesh's most trusted digital wallet platform,
                   serving over 1 million users across all 64 districts.
                 </p>
-                <p className="text-lg text-muted-foreground leading-relaxed">
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                   From rickshaw pullers to tech entrepreneurs, from students to business owners – SwiftPay bridges
                   the financial divide, enabling everyone to participate in the digital economy with confidence and ease.
                 </p>
@@ -139,24 +131,22 @@ const About: React.FC = () => {
       </section>
 
       {/* Mission, Vision & Values */}
-      <section className="fintech-section">
-        <div className="fintech-container">
-          <div className="text-center mb-16 fintech-fade-in">
+      <section className="relative py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What Drives <span className="fintech-gradient-text">Us</span>
+              What Drives <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Us</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Our core principles that shape every decision and innovation
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {values.map((value, index) => (
               <Card
                 key={index}
-                variant="fintech"
-                className="text-center group hover:scale-105 transition-all duration-300 fintech-slide-up"
-                style={{ animationDelay: `${index * 200}ms` }}
+                className="text-center group hover:scale-105 transition-all duration-300 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg"
               >
                 <CardHeader className="pb-4">
                   <div className={`mx-auto w-16 h-16 rounded-2xl bg-gradient-to-r ${value.gradient} p-4 mb-6 group-hover:scale-110 transition-transform duration-300`}>
@@ -178,32 +168,30 @@ const About: React.FC = () => {
       </section>
 
       {/* Achievements */}
-      <section className="fintech-section bg-gradient-to-br from-primary/5 to-green-500/5">
-        <div className="fintech-container">
-          <div className="text-center mb-16 fintech-fade-in">
+      <section className="relative py-16 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Our <span className="fintech-gradient-text">Impact</span>
+              Our <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Impact</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Numbers that reflect our commitment to transforming Bangladesh's financial landscape
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {achievements.map((achievement, index) => (
               <Card
                 key={index}
-                variant="glass"
-                className="text-center p-6 fintech-scale-in"
-                style={{ animationDelay: `${index * 150}ms` }}
+                className="text-center p-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 shadow-md"
               >
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-blue-600 mx-auto mb-6 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mb-6 flex items-center justify-center">
                   <achievement.icon className="h-8 w-8 text-white" />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold fintech-gradient-text mb-2">
+                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
                   {achievement.stat}
                 </div>
-                <p className="text-muted-foreground font-medium">
+                <p className="text-slate-600 dark:text-slate-400 font-medium">
                   {achievement.label}
                 </p>
               </Card>
@@ -213,38 +201,36 @@ const About: React.FC = () => {
       </section>
 
       {/* Team Section */}
-      <section className="fintech-section">
-        <div className="fintech-container">
-          <div className="text-center mb-16 fintech-fade-in">
+      <section className="relative py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Meet Our <span className="fintech-gradient-text">Team</span>
+              Meet Our <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Team</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               The passionate innovators behind SwiftPay's success
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
             {teamMembers.map((member, index) => (
               <Card
                 key={index}
-                variant="fintech"
-                className="text-center group hover:scale-105 transition-all duration-300 fintech-slide-up"
-                style={{ animationDelay: `${index * 200}ms` }}
+                className="text-center group hover:scale-105 transition-all duration-300 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-0 shadow-lg"
               >
                 <CardHeader className="pb-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-primary to-blue-600 mx-auto mb-6 flex items-center justify-center text-white text-xl font-bold group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mb-6 flex items-center justify-center text-white text-xl font-bold group-hover:scale-110 transition-transform duration-300">
                     {member.avatar}
                   </div>
                   <CardTitle className="text-xl font-bold">
                     {member.name}
                   </CardTitle>
-                  <p className="text-primary font-medium">
+                  <p className="text-blue-600 dark:text-blue-400 font-medium">
                     {member.role}
                   </p>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
                     {member.bio}
                   </p>
                 </CardContent>
@@ -255,20 +241,20 @@ const About: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="fintech-section">
-        <div className="fintech-container">
-          <Card variant="fintech" className="p-8 md:p-12 max-w-3xl mx-auto text-center fintech-scale-in">
+      <section className="relative py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="p-8 md:p-12 max-w-3xl mx-auto text-center bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 text-white border-0 shadow-2xl">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Join the <span className="fintech-gradient-text">Revolution</span>?
+              Ready to Join the <span className="text-blue-100">Revolution</span>?
             </h3>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            <p className="text-lg text-blue-100 mb-8 leading-relaxed">
               Be part of Bangladesh's financial transformation. Experience the future of digital payments today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="fintech-primary" size="lg" className="px-8" asChild>
+              <Button size="lg" className="px-8 bg-white text-blue-600 hover:bg-blue-50 font-semibold" asChild>
                 <Link to="/register">Start Your Journey</Link>
               </Button>
-              <Button variant="fintech-ghost" size="lg" className="px-8" asChild>
+              <Button size="lg" className="px-8 border-2 border-white text-white hover:bg-white/20 font-semibold bg-transparent" asChild>
                 <Link to="/features">Explore Features</Link>
               </Button>
             </div>

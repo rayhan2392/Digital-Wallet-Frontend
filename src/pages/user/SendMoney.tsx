@@ -55,7 +55,7 @@ type SendMoneyFormData = z.infer<ReturnType<typeof createSendMoneySchema>>;
 
 
 // Quick amount suggestions
-const quickAmounts = [100, 500, 1000, 2000, 5000];
+const quickAmounts = [10, 20, 30, 50, 100];
 
 export default function SendMoney() {
     const navigate = useNavigate();
@@ -70,7 +70,7 @@ export default function SendMoney() {
 
     const form = useForm<SendMoneyFormData>({
         resolver: zodResolver(createSendMoneySchema(availableBalance)),
-        mode: "onChange", // Validate on change for real-time feedback
+        mode: "onTouched", // Validate only after user interacts with field
         defaultValues: {
             receiverPhone: "",
             amount: ""
@@ -79,19 +79,14 @@ export default function SendMoney() {
 
     // Update form resolver when balance changes
     useEffect(() => {
-        if (availableBalance > 0) {
-            form.clearErrors(); // Clear previous errors
-            // Re-trigger validation with new balance
-            form.trigger();
+        if (availableBalance > 0 && form.formState.isSubmitted) {
+            // Only re-validate if form was already submitted
+            form.trigger("amount");
         }
     }, [availableBalance, form]);
 
     const watchedAmount = form.watch("amount");
     const watchedPhone = form.watch("receiverPhone");
-
-    // Form validation state
-    const { isValid } = form.formState;
-
 
     // Calculate fees and final amounts
     const transactionDetails = useMemo(() => {
@@ -261,8 +256,10 @@ export default function SendMoney() {
                                                     type="button"
                                                     onClick={() => selectQuickAmount(amount)}
                                                     className={cn(
-                                                        "p-3 rounded-lg border text-sm font-medium",
-                                                        Number(watchedAmount) === amount && "border-primary bg-primary/10 text-primary"
+                                                        "p-3 rounded-lg border text-sm font-medium transition-colors",
+                                                        Number(watchedAmount) === amount 
+                                                            ? "border-primary bg-primary/10 text-primary" 
+                                                            : "border-border/50 hover:border-primary/50 hover:bg-primary/5"
                                                     )}
                                                 >
                                                     ৳{amount}
@@ -345,18 +342,11 @@ export default function SendMoney() {
                                                 type="submit"
                                                 variant="fintech-primary"
                                                 size="lg"
-                                                className={cn(
-                                                    "w-full fintech-slide-up delay-750",
-                                                    (!isValid || !transactionDetails.canAfford || transactionDetails.amount === 0) && "opacity-50 cursor-not-allowed"
-                                                )}
-                                                disabled={!isValid || !transactionDetails.canAfford || isSending || transactionDetails.amount === 0}
+                                                className="w-full fintech-slide-up delay-750"
+                                                disabled={isSending || !watchedPhone.trim() || !watchedAmount.trim()}
                                             >
                                                 <ArrowUpRight className="h-5 w-5 mr-2" />
-                                                {isSending ? "Sending..." :
-                                                    !watchedPhone.trim() || !watchedAmount.trim() ? "Enter Details" :
-                                                        !isValid ? "Invalid Details" :
-                                                            !transactionDetails.canAfford ? "Insufficient Balance" :
-                                                                "Send Money"}
+                                                {isSending ? "Sending..." : "Send Money"}
                                             </Button>
                                         </AlertDialogTrigger>
 

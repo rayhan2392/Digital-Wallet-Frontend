@@ -74,10 +74,11 @@ const RegisterForm: React.FC = () => {
       password: data.password
     }
 
+    const toastId = toast.loading("Creating your account...", {
+      description: "Setting up your SwiftPay wallet"
+    });
+
     try {
-      const toastId = toast.loading("Creating your account...", {
-        description: "Setting up your SwiftPay wallet"
-      });
       const res = await register(userInfo).unwrap();
 
       if (res.success) {
@@ -141,24 +142,32 @@ const RegisterForm: React.FC = () => {
           }, 1500);
         }
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Registration failed", {
-        description: "Please check your information and try again"
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Registration error:", error);
+
+      // Extract error message from API response
+      const errorMessage = error?.data?.message || error?.message || "Registration failed";
+      const errorDescription = error?.data?.error || "Please check your information and try again";
+
+      toast.error(errorMessage, {
+        id: toastId,
+        description: errorDescription,
+        duration: 4000,
       });
     }
   };
 
   return (
-    <CardContent className="space-y-6 px-8">
+    <CardContent className="space-y-5 px-10 pb-6">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Name */}
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Full Name
                 </FormLabel>
@@ -185,7 +194,7 @@ const RegisterForm: React.FC = () => {
             control={form.control}
             name="phone"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Phone Number
                 </FormLabel>
@@ -212,7 +221,7 @@ const RegisterForm: React.FC = () => {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Email Address
                 </FormLabel>
@@ -239,7 +248,7 @@ const RegisterForm: React.FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Password
                 </FormLabel>
@@ -266,7 +275,7 @@ const RegisterForm: React.FC = () => {
             control={form.control}
             name="confirmPassword"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   Confirm Password
                 </FormLabel>
@@ -293,7 +302,7 @@ const RegisterForm: React.FC = () => {
             control={form.control}
             name="role"
             render={({ field }) => (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                   I am a
                 </FormLabel>
@@ -372,10 +381,10 @@ const RegisterForm: React.FC = () => {
             )}
           />
 
-          <div className="pt-4">
+          <div className="pt-2">
             <Button
               type="submit"
-              className="w-full h-14 bg-gradient-to-r from-green-600 via-green-700 to-emerald-700 text-white font-semibold text-base shadow-xl shadow-green-600/25 hover:shadow-2xl hover:shadow-green-600/30 hover:from-green-700 hover:via-green-800 hover:to-emerald-800 transition-all duration-300 rounded-xl"
+              className="w-full h-12 bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white font-semibold text-base shadow-xl shadow-blue-600/25 hover:shadow-2xl hover:shadow-blue-600/30 hover:from-blue-700 hover:via-blue-800 hover:to-indigo-800 transition-all duration-300 rounded-xl"
               size="lg"
               disabled={isLoading}
             >
