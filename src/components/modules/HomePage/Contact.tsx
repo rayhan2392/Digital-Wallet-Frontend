@@ -30,7 +30,7 @@ const Contact: React.FC = () => {
             Get in <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Touch</span>
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Have questions about SwiftPay? We're here to help you 24/7
+            Have questions about SwiftPay payment? We're here to help you 24/7
           </p>
         </div>
 
